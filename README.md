@@ -11,7 +11,7 @@ Package name `gerard.meli.backend_portfolio`. Dépendances à cocher :
 Spring Web, Spring Data JPA, Validation, Spring Security, **OAuth2 Resource Server**, Actuator,
 **Lombok**, PostgreSQL Driver, Flyway Migration.
 
-À ajouter **à la main** dans le `pom.xml` (sans elle, l'appli plante avec `Unsupported Database: PostgreSQL`) :
+À ajouter **à la main** dans le `pom.xml` avec Flyway (sans elle, l'appli plante avec `Unsupported Database: PostgreSQL`) :
 
 ```xml
 <dependency>
@@ -19,6 +19,8 @@ Spring Web, Spring Data JPA, Validation, Spring Security, **OAuth2 Resource Serv
     <artifactId>flyway-database-postgresql</artifactId>
 </dependency>
 ```
+
+Avec Spring Boot 4, ajoute aussi `spring-boot-starter-flyway` pour activer l'exécution automatique des migrations.
 
 Puis copie par-dessus le projet généré : `src/`, `docker-compose.yml`, `Dockerfile`, `.gitignore`,
 `.env.example` et `smoke-test.sh`.
@@ -31,7 +33,12 @@ SPRING_PROFILES_ACTIVE=dev ./mvnw spring-boot:run       # Windows : mvnw.cmd
 ./smoke-test.sh                                         # vérifie tout de bout en bout
 ```
 
-Le profil `dev` (`application-dev.yml`) fournit un secret JWT et un admin de test
+Dans IntelliJ IDEA, sélectionne la configuration partagée **BackendPortfolioApplication (dev)** ou ajoute
+`dev` dans **Run/Debug Configurations > Active profiles**. Lancer directement la classe principale sans ce profil
+ne charge pas le secret JWT local.
+
+Le profil `dev` (`application-dev.yaml`) fournit les identifiants PostgreSQL du `docker-compose.yml`,
+un secret JWT local et un admin de test
 (`admin@local.test` / `dev-password-123456`). **Uniquement pour le local.**
 Le test de fumée crée puis supprime des données de test : ne le lance pas sur un site déjà rempli.
 
