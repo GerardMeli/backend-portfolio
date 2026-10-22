@@ -1,3 +1,44 @@
 spring:
   application:
     name: backend-portfolio
+  main:
+    lazy-initialization: true        # démarrage plus rapide / moins de RAM sur offre gratuite
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/portfolio}
+    username: ${DB_USER:postgres}
+    password: ${DB_PASSWORD:root}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate             # le schéma est géré uniquement par Flyway
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+server:
+  port: ${PORT:8080}                 # les hébergeurs injectent PORT
+  forward-headers-strategy: framework  # vraie IP client derrière le proxy de l'hébergeur
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+
+app:
+  cors:
+    allowed-origins: ${APP_CORS_ORIGINS:http://localhost:4200}
+  locales:
+    default: fr
+    supported: fr,en
+  security:
+    jwt:
+      secret: ${JWT_SECRET}          # obligatoire, 32 caractères minimum (pas de valeur par défaut)
+      expiration-minutes: 120
+    bootstrap:                       # premier admin, créé seulement si la table admin_user est vide
+      email: ${ADMIN_EMAIL:}
+      password: ${ADMIN_PASSWORD:}   # 12 caractères minimum
