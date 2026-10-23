@@ -1,5 +1,6 @@
 package gerard.meli.backend_portfolio.domain;
 
+import gerard.meli.backend_portfolio.enums.ProjectKind;
 import jakarta.persistence.*;
 import java.time.*;
 import java.util.*;

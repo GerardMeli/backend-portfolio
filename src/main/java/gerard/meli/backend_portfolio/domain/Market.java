@@ -1,5 +1,6 @@
 package gerard.meli.backend_portfolio.domain;
 
+import gerard.meli.backend_portfolio.enums.PageFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
