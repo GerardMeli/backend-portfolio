@@ -16,16 +16,16 @@ spring:
       minimum-idle: 1
       connection-timeout: 20000
 
-  sql:
-    init:
-      mode: always                # exécute schema.sql au démarrage (sans Flyway)
-      schema-locations: classpath:schema.sql
-      encoding: UTF-8
+#  sql:
+#    init:
+#      mode: always                # exécute schema.sql au démarrage (sans Flyway)
+#      schema-locations: classpath:schema.sql
+#      encoding: UTF-8
 
   jpa:
     open-in-view: false
     hibernate:
-      ddl-auto: validate          # vérifie que les entités collent au schéma SQL
+      ddl-auto: update          # vérifie que les entités collent au schéma SQL
     properties:
       hibernate:
         format_sql: true
