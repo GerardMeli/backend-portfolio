@@ -16,16 +16,16 @@ spring:
       minimum-idle: 1
       connection-timeout: 20000
 
-#  sql:
-#    init:
-#      mode: always                # exécute schema.sql au démarrage (sans Flyway)
-#      schema-locations: classpath:schema.sql
-#      encoding: UTF-8
+  sql:
+    init:
+      mode: always                # exécute schema.sql au démarrage (sans Flyway)
+      schema-locations: classpath:schema.sql
+      encoding: UTF-8
 
   jpa:
     open-in-view: false
     hibernate:
-      ddl-auto: update          # vérifie que les entités collent au schéma SQL
+      ddl-auto: validate          # vérifie que les entités collent au schéma SQL
     properties:
       hibernate:
         format_sql: true
@@ -35,8 +35,6 @@ spring:
 
   jackson:
     default-property-inclusion: non_null
-    serialization:
-      write-dates-as-timestamps: false
 
 server:
   port: ${PORT:8089}              # Render/Koyeb fournissent PORT
@@ -108,3 +106,4 @@ logging:
   level:
     root: WARN
     gerard.meli.backend_portfolio: INFO
+    org.springframework.security: ${LOG_LEVEL_SECURITY:DEBUG}
