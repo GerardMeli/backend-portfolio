@@ -10,7 +10,7 @@
 
 -- ---------- Authentification (admin unique) ----------
 CREATE TABLE IF NOT EXISTS app_user (
-    id            BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    id            VARCHAR(255) PRIMARY KEY,
     email         VARCHAR(255) NOT NULL UNIQUE,
     password_hash VARCHAR(255) NOT NULL,
     created_at    TIMESTAMPTZ  NOT NULL DEFAULT now()
@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS app_user (
 
 -- ---------- Profil (une seule ligne) ----------
 CREATE TABLE IF NOT EXISTS profile (
-    id                 BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    id                 VARCHAR(255) PRIMARY KEY,
     full_name          VARCHAR(150) NOT NULL,
     headline           JSONB,
     summary            JSONB,
@@ -62,7 +62,7 @@ CREATE TABLE IF NOT EXISTS market_section (
 
 -- ---------- Expériences et tâches ----------
 CREATE TABLE IF NOT EXISTS experience (
-    id              BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    id              VARCHAR(255) PRIMARY KEY,
     company         VARCHAR(200) NOT NULL,
     location        VARCHAR(150),
     title           JSONB NOT NULL,
@@ -79,8 +79,8 @@ CREATE TABLE IF NOT EXISTS experience (
 );
 
 CREATE TABLE IF NOT EXISTS experience_task (
-    id            BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    experience_id BIGINT NOT NULL REFERENCES experience(id) ON DELETE CASCADE,
+    id            VARCHAR(255) PRIMARY KEY,
+    experience_id VARCHAR(255) NOT NULL REFERENCES experience(id) ON DELETE CASCADE,
     content       JSONB NOT NULL,
     markets       VARCHAR(20)[],
     position      INT NOT NULL DEFAULT 0,
@@ -89,7 +89,7 @@ CREATE TABLE IF NOT EXISTS experience_task (
 
 -- ---------- Formations ----------
 CREATE TABLE IF NOT EXISTS education (
-    id          BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    id          VARCHAR(255) PRIMARY KEY,
     institution VARCHAR(200) NOT NULL,
     location    VARCHAR(150),
     degree      JSONB NOT NULL,
@@ -104,7 +104,7 @@ CREATE TABLE IF NOT EXISTS education (
 
 -- ---------- Projets (personnels / pro / open source) ----------
 CREATE TABLE IF NOT EXISTS project (
-    id          BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    id          VARCHAR(255) PRIMARY KEY,
     name        VARCHAR(200) NOT NULL,
     kind        VARCHAR(20)  NOT NULL DEFAULT 'PERSONAL',  -- PERSONAL, PROFESSIONAL, OPEN_SOURCE
     description JSONB,
@@ -119,8 +119,8 @@ CREATE TABLE IF NOT EXISTS project (
 );
 
 CREATE TABLE IF NOT EXISTS project_highlight (
-    id         BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    project_id BIGINT NOT NULL REFERENCES project(id) ON DELETE CASCADE,
+    id         VARCHAR(255) PRIMARY KEY,
+    project_id VARCHAR(255) NOT NULL REFERENCES project(id) ON DELETE CASCADE,
     content    JSONB NOT NULL,
     position   INT NOT NULL DEFAULT 0,
     visible    BOOLEAN NOT NULL DEFAULT TRUE
@@ -128,15 +128,15 @@ CREATE TABLE IF NOT EXISTS project_highlight (
 
 -- ---------- Compétences ----------
 CREATE TABLE IF NOT EXISTS skill_category (
-    id       BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    id       VARCHAR(255) PRIMARY KEY,
     name     JSONB NOT NULL,             -- Backend, Frontend, Base de données...
     position INT NOT NULL DEFAULT 0,
     visible  BOOLEAN NOT NULL DEFAULT TRUE
 );
 
 CREATE TABLE IF NOT EXISTS skill (
-    id          BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    category_id BIGINT NOT NULL REFERENCES skill_category(id) ON DELETE CASCADE,
+    id          VARCHAR(255) PRIMARY KEY,
+    category_id VARCHAR(255) NOT NULL REFERENCES skill_category(id) ON DELETE CASCADE,
     name        VARCHAR(100) NOT NULL,
     level       SMALLINT CHECK (level BETWEEN 1 AND 5),
     markets     VARCHAR(20)[],
@@ -146,7 +146,7 @@ CREATE TABLE IF NOT EXISTS skill (
 
 -- ---------- Certifications et langues ----------
 CREATE TABLE IF NOT EXISTS certification (
-    id             BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    id             VARCHAR(255) PRIMARY KEY,
     name           JSONB NOT NULL,
     issuer         VARCHAR(200),
     issued_on      DATE,
@@ -158,7 +158,7 @@ CREATE TABLE IF NOT EXISTS certification (
 );
 
 CREATE TABLE IF NOT EXISTS spoken_language (
-    id       BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    id       VARCHAR(255) PRIMARY KEY,
     name     JSONB NOT NULL,
     level    VARCHAR(20),                -- A1..C2 (CECRL) ou Natif
     position INT NOT NULL DEFAULT 0,
@@ -167,7 +167,7 @@ CREATE TABLE IF NOT EXISTS spoken_language (
 
 -- ---------- Sections personnalisées (références, bénévolat, publications...) ----------
 CREATE TABLE IF NOT EXISTS custom_section (
-    id       BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    id       VARCHAR(255) PRIMARY KEY,
     code     VARCHAR(50) NOT NULL UNIQUE,   -- utilisé dans market_section.section_type
     title    JSONB NOT NULL,
     markets  VARCHAR(20)[],
@@ -176,8 +176,8 @@ CREATE TABLE IF NOT EXISTS custom_section (
 );
 
 CREATE TABLE IF NOT EXISTS custom_item (
-    id          BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    section_id  BIGINT NOT NULL REFERENCES custom_section(id) ON DELETE CASCADE,
+    id          VARCHAR(255) PRIMARY KEY,
+    section_id  VARCHAR(255) NOT NULL REFERENCES custom_section(id) ON DELETE CASCADE,
     title       JSONB NOT NULL,
     subtitle    VARCHAR(200),
     description JSONB,
@@ -197,7 +197,7 @@ CREATE INDEX IF NOT EXISTS idx_custom_item_section ON custom_item(section_id);
 
 -- ---------- Données initiales des marchés (idempotent) ----------
 INSERT INTO market (code, label, default_locale, page_format, date_format, show_photo, show_personal_details, max_pages, notes) VALUES
- ('AFRICA', 'Afrique francophone', 'fr', 'A4',     'MM/yyyy',  TRUE,  TRUE,  2, 'Photo et état civil courants'),
+ ('AFRICA', 'Afrique francophone', 'fr', 'A4',     'MM/yyyy',  FALSE,  TRUE,  2, 'Photo et état civil courants'),
  ('CANADA', 'Canada',              'en', 'LETTER', 'MMM yyyy', FALSE, FALSE, 2, 'Sans photo ni infos personnelles, résultats chiffrés'),
  ('EU',     'Union européenne',    'en', 'A4',     'MM/yyyy',  FALSE, FALSE, 2, 'Style Europass, photo optionnelle')
 ON CONFLICT (code) DO NOTHING;
