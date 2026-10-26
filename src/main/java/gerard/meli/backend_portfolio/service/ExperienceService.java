@@ -36,7 +36,7 @@ public class ExperienceService {
     }
 
     @Transactional(readOnly = true)
-    public ExperienceDto get(Long id) {
+    public ExperienceDto get(String id) {
         return mapper.toDto(repository.findByIdWithTasks(id).orElseThrow(() -> notFound(id)));
     }
 
@@ -59,14 +59,14 @@ public class ExperienceService {
         return mapper.toDto(repository.save(entity));
     }
 
-    public ExperienceDto update(Long id, ExperienceDto dto) {
+    public ExperienceDto update(String id, ExperienceDto dto) {
         Experience entity = find(id);
         guard.check(dto.markets());
         mapper.update(dto, entity);
         return mapper.toDto(entity);
     }
 
-    public void delete(Long id) {
+    public void delete(String id) {
         repository.delete(find(id));
     }
 
@@ -77,12 +77,12 @@ public class ExperienceService {
     // ---------- Tâche ----------
 
     @Transactional(readOnly = true)
-    public List<ExperienceTaskDto> listTasks(Long parentId) {
+    public List<ExperienceTaskDto> listTasks(String parentId) {
         requireParent(parentId);
         return childRepository.findByExperienceIdOrderBySortOrderAsc(parentId).stream().map(childMapper::toDto).toList();
     }
 
-    public ExperienceTaskDto addTask(Long parentId, ExperienceTaskDto dto) {
+    public ExperienceTaskDto addTask(String parentId, ExperienceTaskDto dto) {
         Experience parent = find(parentId);
         guard.check(dto.markets());
         ExperienceTask child = childMapper.toEntity(dto);
@@ -93,41 +93,41 @@ public class ExperienceService {
         return childMapper.toDto(childRepository.save(child));
     }
 
-    public ExperienceTaskDto updateTask(Long parentId, Long childId, ExperienceTaskDto dto) {
+    public ExperienceTaskDto updateTask(String parentId, String childId, ExperienceTaskDto dto) {
         ExperienceTask child = findChild(parentId, childId);
         guard.check(dto.markets());
         childMapper.update(dto, child);
         return childMapper.toDto(child);
     }
 
-    public void deleteTask(Long parentId, Long childId) {
+    public void deleteTask(String parentId, String childId) {
         ExperienceTask child = findChild(parentId, childId);
         child.getExperience().getTasks().remove(child);
         childRepository.delete(child);
     }
 
-    public void reorderTasks(Long parentId, ReorderRequest request) {
+    public void reorderTasks(String parentId, ReorderRequest request) {
         requireParent(parentId);
         ReorderSupport.apply(childRepository.findByExperienceIdOrderBySortOrderAsc(parentId), request.ids(), ExperienceTask::getId, ExperienceTask::setSortOrder);
     }
 
     // ---------- interne ----------
 
-    private Experience find(Long id) {
+    private Experience find(String id) {
         return repository.findById(id).orElseThrow(() -> notFound(id));
     }
 
-    private void requireParent(Long id) {
+    private void requireParent(String id) {
         if (!repository.existsById(id)) throw notFound(id);
     }
 
-    private ExperienceTask findChild(Long parentId, Long childId) {
+    private ExperienceTask findChild(String parentId, String childId) {
         return childRepository.findById(childId)
                 .filter(c -> c.getExperience().getId().equals(parentId))
                 .orElseThrow(() -> new NotFoundException("Tâche introuvable : " + childId));
     }
 
-    private NotFoundException notFound(Long id) {
+    private NotFoundException notFound(String id) {
         return new NotFoundException("Expérience introuvable : " + id);
     }
 }

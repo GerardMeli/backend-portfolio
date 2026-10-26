@@ -45,7 +45,7 @@ public class ExperienceAdminController {
             @ApiResponse(responseCode = "401", description = "Non authentifié", content = @Content)
     })
     @GetMapping("/{id}")
-    public ExperienceDto get(@Parameter(description = "Identifiant de l'expérience") @PathVariable("id") Long id) {
+    public ExperienceDto get(@Parameter(description = "Identifiant de l'expérience") @PathVariable("id") String id) {
         return service.get(id);
     }
 
@@ -71,7 +71,7 @@ public class ExperienceAdminController {
             @ApiResponse(responseCode = "401", description = "Non authentifié", content = @Content)
     })
     @PutMapping("/{id}")
-    public ExperienceDto update(@Parameter(description = "Identifiant de l'expérience") @PathVariable("id") Long id,
+    public ExperienceDto update(@Parameter(description = "Identifiant de l'expérience") @PathVariable("id") String id,
                                 @Valid @RequestBody ExperienceDto dto) {
         return service.update(id, dto);
     }
@@ -84,7 +84,7 @@ public class ExperienceAdminController {
     })
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@Parameter(description = "Identifiant de l'expérience") @PathVariable("id") Long id) {
+    public void delete(@Parameter(description = "Identifiant de l'expérience") @PathVariable("id") String id) {
         service.delete(id);
     }
 
@@ -107,7 +107,7 @@ public class ExperienceAdminController {
             @ApiResponse(responseCode = "401", description = "Non authentifié", content = @Content)
     })
     @GetMapping("/{id}/tasks")
-    public List<ExperienceTaskDto> listTasks(@Parameter(description = "Identifiant de l'expérience") @PathVariable("id") Long id) {
+    public List<ExperienceTaskDto> listTasks(@Parameter(description = "Identifiant de l'expérience") @PathVariable("id") String id) {
         return service.listTasks(id);
     }
 
@@ -121,7 +121,7 @@ public class ExperienceAdminController {
     })
     @PostMapping("/{id}/tasks")
     @ResponseStatus(HttpStatus.CREATED)
-    public ExperienceTaskDto addTask(@Parameter(description = "Identifiant de l'expérience") @PathVariable("id") Long id,
+    public ExperienceTaskDto addTask(@Parameter(description = "Identifiant de l'expérience") @PathVariable("id") String id,
                                      @Valid @RequestBody ExperienceTaskDto dto) {
         return service.addTask(id, dto);
     }
@@ -135,8 +135,8 @@ public class ExperienceAdminController {
             @ApiResponse(responseCode = "401", description = "Non authentifié", content = @Content)
     })
     @PutMapping("/{id}/tasks/{childId}")
-    public ExperienceTaskDto updateTask(@Parameter(description = "Identifiant de l'expérience") @PathVariable("id") Long id,
-                                        @Parameter(description = "Identifiant de la tâche") @PathVariable("childId") Long childId,
+    public ExperienceTaskDto updateTask(@Parameter(description = "Identifiant de l'expérience") @PathVariable("id") String id,
+                                        @Parameter(description = "Identifiant de la tâche") @PathVariable("childId") String childId,
                                         @Valid @RequestBody ExperienceTaskDto dto) {
         return service.updateTask(id, childId, dto);
     }
@@ -149,8 +149,8 @@ public class ExperienceAdminController {
     })
     @DeleteMapping("/{id}/tasks/{childId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteTask(@Parameter(description = "Identifiant de l'expérience") @PathVariable("id") Long id,
-                           @Parameter(description = "Identifiant de la tâche") @PathVariable("childId") Long childId) {
+    public void deleteTask(@Parameter(description = "Identifiant de l'expérience") @PathVariable("id") String id,
+                           @Parameter(description = "Identifiant de la tâche") @PathVariable("childId") String childId) {
         service.deleteTask(id, childId);
     }
 
@@ -163,7 +163,7 @@ public class ExperienceAdminController {
     })
     @PatchMapping("/{id}/tasks/reorder")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void reorderTasks(@Parameter(description = "Identifiant de l'expérience") @PathVariable("id") Long id,
+    public void reorderTasks(@Parameter(description = "Identifiant de l'expérience") @PathVariable("id") String id,
                              @Valid @RequestBody ReorderRequest request) {
         service.reorderTasks(id, request);
     }

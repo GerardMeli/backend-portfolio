@@ -27,7 +27,7 @@ public class LanguageService {
     }
 
     @Transactional(readOnly = true)
-    public LanguageDto get(Long id) {
+    public LanguageDto get(String id) {
         return mapper.toDto(find(id));
     }
 
@@ -39,13 +39,13 @@ public class LanguageService {
         return mapper.toDto(repository.save(entity));
     }
 
-    public LanguageDto update(Long id, LanguageDto dto) {
+    public LanguageDto update(String id, LanguageDto dto) {
         SpokenLanguage entity = find(id);
         mapper.update(dto, entity);
         return mapper.toDto(entity);
     }
 
-    public void delete(Long id) {
+    public void delete(String id) {
         repository.delete(find(id));
     }
 
@@ -54,7 +54,7 @@ public class LanguageService {
         ReorderSupport.apply(repository.findAll(), request.ids(), SpokenLanguage::getId, SpokenLanguage::setSortOrder);
     }
 
-    private SpokenLanguage find(Long id) {
+    private SpokenLanguage find(String id) {
         return repository.findById(id).orElseThrow(() -> new NotFoundException("Langue introuvable : " + id));
     }
 }

@@ -5,10 +5,10 @@ import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 import java.util.*;
 
-public interface CustomItemRepository extends JpaRepository<CustomItem, Long> {
+public interface CustomItemRepository extends JpaRepository<CustomItem, String> {
 
-    List<CustomItem> findBySectionIdOrderBySortOrderAsc(Long sectionId);
+    List<CustomItem> findBySectionIdOrderBySortOrderAsc(String sectionId);
 
     @Query("select coalesce(max(i.sortOrder), -1) from CustomItem i where i.section.id = :sectionId")
-    int maxSortOrder(@Param("sectionId") Long sectionId);
+    int maxSortOrder(@Param("sectionId") String sectionId);
 }

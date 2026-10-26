@@ -21,8 +21,8 @@ import org.hibernate.type.SqlTypes;
 public class Experience {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String id;
 
     @Column(name = "company", length = 200, nullable = false)
     private String company;

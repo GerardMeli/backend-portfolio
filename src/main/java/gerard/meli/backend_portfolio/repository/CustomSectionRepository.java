@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 import java.util.*;
 
-public interface CustomSectionRepository extends JpaRepository<CustomSection, Long> {
+public interface CustomSectionRepository extends JpaRepository<CustomSection, String> {
 
     Optional<CustomSection> findByCode(String code);
 
@@ -17,7 +17,7 @@ public interface CustomSectionRepository extends JpaRepository<CustomSection, Lo
     List<CustomSection> findAllVisibleWithItems();
 
     @Query("select s from CustomSection s left join fetch s.items where s.id = :id")
-    Optional<CustomSection> findByIdWithItems(@Param("id") Long id);
+    Optional<CustomSection> findByIdWithItems(@Param("id") String id);
 
     @Query("select coalesce(max(s.sortOrder), -1) from CustomSection s")
     int maxSortOrder();

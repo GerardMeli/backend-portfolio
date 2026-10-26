@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 import java.util.*;
 
-public interface ProjectRepository extends JpaRepository<Project, Long> {
+public interface ProjectRepository extends JpaRepository<Project, String> {
 
     List<Project> findAllByOrderBySortOrderAscStartDateDesc();
 
@@ -13,7 +13,7 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
     List<Project> findAllVisibleWithHighlights();
 
     @Query("select p from Project p left join fetch p.highlights where p.id = :id")
-    Optional<Project> findByIdWithHighlights(@Param("id") Long id);
+    Optional<Project> findByIdWithHighlights(@Param("id") String id);
 
     @Query("select coalesce(max(p.sortOrder), -1) from Project p")
     int maxSortOrder();

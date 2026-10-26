@@ -45,7 +45,7 @@ public class LanguageAdminController {
             @ApiResponse(responseCode = "401", description = "Non authentifié", content = @Content)
     })
     @GetMapping("/{id}")
-    public LanguageDto get(@Parameter(description = "Identifiant de la langue") @PathVariable("id") Long id) {
+    public LanguageDto get(@Parameter(description = "Identifiant de la langue") @PathVariable("id") String id) {
         return service.get(id);
     }
 
@@ -71,7 +71,7 @@ public class LanguageAdminController {
             @ApiResponse(responseCode = "401", description = "Non authentifié", content = @Content)
     })
     @PutMapping("/{id}")
-    public LanguageDto update(@Parameter(description = "Identifiant de la langue") @PathVariable("id") Long id,
+    public LanguageDto update(@Parameter(description = "Identifiant de la langue") @PathVariable("id") String id,
                               @Valid @RequestBody LanguageDto dto) {
         return service.update(id, dto);
     }
@@ -84,7 +84,7 @@ public class LanguageAdminController {
     })
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@Parameter(description = "Identifiant de la langue") @PathVariable("id") Long id) {
+    public void delete(@Parameter(description = "Identifiant de la langue") @PathVariable("id") String id) {
         service.delete(id);
     }
 

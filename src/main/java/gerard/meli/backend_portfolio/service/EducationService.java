@@ -29,7 +29,7 @@ public class EducationService {
     }
 
     @Transactional(readOnly = true)
-    public EducationDto get(Long id) {
+    public EducationDto get(String id) {
         return mapper.toDto(find(id));
     }
 
@@ -42,14 +42,14 @@ public class EducationService {
         return mapper.toDto(repository.save(entity));
     }
 
-    public EducationDto update(Long id, EducationDto dto) {
+    public EducationDto update(String id, EducationDto dto) {
         Education entity = find(id);
         guard.check(dto.markets());
         mapper.update(dto, entity);
         return mapper.toDto(entity);
     }
 
-    public void delete(Long id) {
+    public void delete(String id) {
         repository.delete(find(id));
     }
 
@@ -58,7 +58,7 @@ public class EducationService {
         ReorderSupport.apply(repository.findAll(), request.ids(), Education::getId, Education::setSortOrder);
     }
 
-    private Education find(Long id) {
+    private Education find(String id) {
         return repository.findById(id).orElseThrow(() -> new NotFoundException("Formation introuvable : " + id));
     }
 }

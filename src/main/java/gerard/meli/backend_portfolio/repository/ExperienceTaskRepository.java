@@ -5,10 +5,10 @@ import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 import java.util.*;
 
-public interface ExperienceTaskRepository extends JpaRepository<ExperienceTask, Long> {
+public interface ExperienceTaskRepository extends JpaRepository<ExperienceTask, String> {
 
-    List<ExperienceTask> findByExperienceIdOrderBySortOrderAsc(Long experienceId);
+    List<ExperienceTask> findByExperienceIdOrderBySortOrderAsc(String experienceId);
 
     @Query("select coalesce(max(t.sortOrder), -1) from ExperienceTask t where t.experience.id = :experienceId")
-    int maxSortOrder(@Param("experienceId") Long experienceId);
+    int maxSortOrder(@Param("experienceId") String experienceId);
 }

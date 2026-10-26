@@ -45,7 +45,7 @@ public class CustomSectionAdminController {
             @ApiResponse(responseCode = "401", description = "Non authentifié", content = @Content)
     })
     @GetMapping("/{id}")
-    public CustomSectionDto get(@Parameter(description = "Identifiant de la section") @PathVariable("id") Long id) {
+    public CustomSectionDto get(@Parameter(description = "Identifiant de la section") @PathVariable("id") String id) {
         return service.get(id);
     }
 
@@ -71,7 +71,7 @@ public class CustomSectionAdminController {
             @ApiResponse(responseCode = "401", description = "Non authentifié", content = @Content)
     })
     @PutMapping("/{id}")
-    public CustomSectionDto update(@Parameter(description = "Identifiant de la section") @PathVariable("id") Long id,
+    public CustomSectionDto update(@Parameter(description = "Identifiant de la section") @PathVariable("id") String id,
                                    @Valid @RequestBody CustomSectionDto dto) {
         return service.update(id, dto);
     }
@@ -84,7 +84,7 @@ public class CustomSectionAdminController {
     })
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@Parameter(description = "Identifiant de la section") @PathVariable("id") Long id) {
+    public void delete(@Parameter(description = "Identifiant de la section") @PathVariable("id") String id) {
         service.delete(id);
     }
 
@@ -95,7 +95,7 @@ public class CustomSectionAdminController {
             @ApiResponse(responseCode = "401", description = "Non authentifié", content = @Content)
     })
     @GetMapping("/{id}/items")
-    public List<CustomItemDto> listItems(@Parameter(description = "Identifiant de la section") @PathVariable("id") Long id) {
+    public List<CustomItemDto> listItems(@Parameter(description = "Identifiant de la section") @PathVariable("id") String id) {
         return service.listItems(id);
     }
 
@@ -109,7 +109,7 @@ public class CustomSectionAdminController {
     })
     @PostMapping("/{id}/items")
     @ResponseStatus(HttpStatus.CREATED)
-    public CustomItemDto addItem(@Parameter(description = "Identifiant de la section") @PathVariable("id") Long id,
+    public CustomItemDto addItem(@Parameter(description = "Identifiant de la section") @PathVariable("id") String id,
                                 @Valid @RequestBody CustomItemDto dto) {
         return service.addItem(id, dto);
     }
@@ -123,8 +123,8 @@ public class CustomSectionAdminController {
             @ApiResponse(responseCode = "401", description = "Non authentifié", content = @Content)
     })
     @PutMapping("/{id}/items/{childId}")
-    public CustomItemDto updateItem(@Parameter(description = "Identifiant de la section") @PathVariable("id") Long id,
-                                   @Parameter(description = "Identifiant de l'élément") @PathVariable("childId") Long childId,
+    public CustomItemDto updateItem(@Parameter(description = "Identifiant de la section") @PathVariable("id") String id,
+                                   @Parameter(description = "Identifiant de l'élément") @PathVariable("childId") String childId,
                                    @Valid @RequestBody CustomItemDto dto) {
         return service.updateItem(id, childId, dto);
     }
@@ -137,8 +137,8 @@ public class CustomSectionAdminController {
     })
     @DeleteMapping("/{id}/items/{childId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteItem(@Parameter(description = "Identifiant de la section") @PathVariable("id") Long id,
-                           @Parameter(description = "Identifiant de l'élément") @PathVariable("childId") Long childId) {
+    public void deleteItem(@Parameter(description = "Identifiant de la section") @PathVariable("id") String id,
+                           @Parameter(description = "Identifiant de l'élément") @PathVariable("childId") String childId) {
         service.deleteItem(id, childId);
     }
 
@@ -151,7 +151,7 @@ public class CustomSectionAdminController {
     })
     @PatchMapping("/{id}/items/reorder")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void reorderItems(@Parameter(description = "Identifiant de la section") @PathVariable("id") Long id,
+    public void reorderItems(@Parameter(description = "Identifiant de la section") @PathVariable("id") String id,
                              @Valid @RequestBody ReorderRequest request) {
         service.reorderItems(id, request);
     }

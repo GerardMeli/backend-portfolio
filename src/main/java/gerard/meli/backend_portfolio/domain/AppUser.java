@@ -18,8 +18,8 @@ import java.util.*;
 public class AppUser {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String id;
 
     @Column(name = "email", length = 255, nullable = false, unique = true)
     private String email;

@@ -29,7 +29,7 @@ public class CertificationService {
     }
 
     @Transactional(readOnly = true)
-    public CertificationDto get(Long id) {
+    public CertificationDto get(String id) {
         return mapper.toDto(find(id));
     }
 
@@ -42,14 +42,14 @@ public class CertificationService {
         return mapper.toDto(repository.save(entity));
     }
 
-    public CertificationDto update(Long id, CertificationDto dto) {
+    public CertificationDto update(String id, CertificationDto dto) {
         Certification entity = find(id);
         guard.check(dto.markets());
         mapper.update(dto, entity);
         return mapper.toDto(entity);
     }
 
-    public void delete(Long id) {
+    public void delete(String id) {
         repository.delete(find(id));
     }
 
@@ -58,7 +58,7 @@ public class CertificationService {
         ReorderSupport.apply(repository.findAll(), request.ids(), Certification::getId, Certification::setSortOrder);
     }
 
-    private Certification find(Long id) {
+    private Certification find(String id) {
         return repository.findById(id).orElseThrow(() -> new NotFoundException("Certification introuvable : " + id));
     }
 }

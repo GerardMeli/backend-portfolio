@@ -20,8 +20,8 @@ import org.hibernate.type.SqlTypes;
 public class Education {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String id;
 
     @Column(name = "institution", length = 200, nullable = false)
     private String institution;

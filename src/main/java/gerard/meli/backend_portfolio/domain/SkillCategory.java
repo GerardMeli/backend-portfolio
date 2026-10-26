@@ -20,8 +20,8 @@ import org.hibernate.type.SqlTypes;
 public class SkillCategory {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String id;
 
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "name", columnDefinition = "jsonb", nullable = false)

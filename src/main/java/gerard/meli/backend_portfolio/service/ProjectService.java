@@ -36,7 +36,7 @@ public class ProjectService {
     }
 
     @Transactional(readOnly = true)
-    public ProjectDto get(Long id) {
+    public ProjectDto get(String id) {
         return mapper.toDto(repository.findByIdWithHighlights(id).orElseThrow(() -> notFound(id)));
     }
 
@@ -56,14 +56,14 @@ public class ProjectService {
         return mapper.toDto(repository.save(entity));
     }
 
-    public ProjectDto update(Long id, ProjectDto dto) {
+    public ProjectDto update(String id, ProjectDto dto) {
         Project entity = find(id);
         guard.check(dto.markets());
         mapper.update(dto, entity);
         return mapper.toDto(entity);
     }
 
-    public void delete(Long id) {
+    public void delete(String id) {
         repository.delete(find(id));
     }
 
@@ -74,12 +74,12 @@ public class ProjectService {
     // ---------- Point clé ----------
 
     @Transactional(readOnly = true)
-    public List<ProjectHighlightDto> listHighlights(Long parentId) {
+    public List<ProjectHighlightDto> listHighlights(String parentId) {
         requireParent(parentId);
         return childRepository.findByProjectIdOrderBySortOrderAsc(parentId).stream().map(childMapper::toDto).toList();
     }
 
-    public ProjectHighlightDto addHighlight(Long parentId, ProjectHighlightDto dto) {
+    public ProjectHighlightDto addHighlight(String parentId, ProjectHighlightDto dto) {
         Project parent = find(parentId);
         ProjectHighlight child = childMapper.toEntity(dto);
         if (dto.sortOrder() == null) {
@@ -89,40 +89,40 @@ public class ProjectService {
         return childMapper.toDto(childRepository.save(child));
     }
 
-    public ProjectHighlightDto updateHighlight(Long parentId, Long childId, ProjectHighlightDto dto) {
+    public ProjectHighlightDto updateHighlight(String parentId, String childId, ProjectHighlightDto dto) {
         ProjectHighlight child = findChild(parentId, childId);
         childMapper.update(dto, child);
         return childMapper.toDto(child);
     }
 
-    public void deleteHighlight(Long parentId, Long childId) {
+    public void deleteHighlight(String parentId, String childId) {
         ProjectHighlight child = findChild(parentId, childId);
         child.getProject().getHighlights().remove(child);
         childRepository.delete(child);
     }
 
-    public void reorderHighlights(Long parentId, ReorderRequest request) {
+    public void reorderHighlights(String parentId, ReorderRequest request) {
         requireParent(parentId);
         ReorderSupport.apply(childRepository.findByProjectIdOrderBySortOrderAsc(parentId), request.ids(), ProjectHighlight::getId, ProjectHighlight::setSortOrder);
     }
 
     // ---------- interne ----------
 
-    private Project find(Long id) {
+    private Project find(String id) {
         return repository.findById(id).orElseThrow(() -> notFound(id));
     }
 
-    private void requireParent(Long id) {
+    private void requireParent(String id) {
         if (!repository.existsById(id)) throw notFound(id);
     }
 
-    private ProjectHighlight findChild(Long parentId, Long childId) {
+    private ProjectHighlight findChild(String parentId, String childId) {
         return childRepository.findById(childId)
                 .filter(c -> c.getProject().getId().equals(parentId))
                 .orElseThrow(() -> new NotFoundException("Point clé introuvable : " + childId));
     }
 
-    private NotFoundException notFound(Long id) {
+    private NotFoundException notFound(String id) {
         return new NotFoundException("Projet introuvable : " + id);
     }
 }

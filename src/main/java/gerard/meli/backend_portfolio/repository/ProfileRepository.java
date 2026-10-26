@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 import java.util.*;
 
-public interface ProfileRepository extends JpaRepository<Profile, Long> {
+public interface ProfileRepository extends JpaRepository<Profile, String> {
 
     /** Le portfolio n'a qu'un seul profil. */
     Optional<Profile> findFirstByOrderByIdAsc();

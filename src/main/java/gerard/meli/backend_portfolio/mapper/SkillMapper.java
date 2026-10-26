@@ -9,8 +9,14 @@ import java.util.*;
 public class SkillMapper {
 
     public SkillDto toDto(Skill s) {
-        return new SkillDto(s.getId(), s.getCategory() == null ? null : s.getCategory().getId(), s.getName(),
-                s.getLevel(), s.getMarkets(), s.getSortOrder(), s.isVisible());
+        return new SkillDto(
+                s.getId(),
+                s.getCategory() == null ? null : s.getCategory().getId(),
+                s.getName(),
+                s.getLevel(),
+                s.getMarkets(),
+                s.getSortOrder(),
+                s.isVisible());
     }
 
     /** Le rattachement à la catégorie se fait via SkillCategory.addSkill(...). */

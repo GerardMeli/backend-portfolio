@@ -21,8 +21,8 @@ import org.hibernate.type.SqlTypes;
 public class Project {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String id;
 
     @Column(name = "name", length = 200, nullable = false)
     private String name;

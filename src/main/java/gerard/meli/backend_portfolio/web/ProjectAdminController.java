@@ -45,7 +45,7 @@ public class ProjectAdminController {
             @ApiResponse(responseCode = "401", description = "Non authentifié", content = @Content)
     })
     @GetMapping("/{id}")
-    public ProjectDto get(@Parameter(description = "Identifiant du projet") @PathVariable("id") Long id) {
+    public ProjectDto get(@Parameter(description = "Identifiant du projet") @PathVariable("id") String id) {
         return service.get(id);
     }
 
@@ -71,7 +71,7 @@ public class ProjectAdminController {
             @ApiResponse(responseCode = "401", description = "Non authentifié", content = @Content)
     })
     @PutMapping("/{id}")
-    public ProjectDto update(@Parameter(description = "Identifiant du projet") @PathVariable("id") Long id,
+    public ProjectDto update(@Parameter(description = "Identifiant du projet") @PathVariable("id") String id,
                              @Valid @RequestBody ProjectDto dto) {
         return service.update(id, dto);
     }
@@ -84,7 +84,7 @@ public class ProjectAdminController {
     })
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@Parameter(description = "Identifiant du projet") @PathVariable("id") Long id) {
+    public void delete(@Parameter(description = "Identifiant du projet") @PathVariable("id") String id) {
         service.delete(id);
     }
 
@@ -107,7 +107,7 @@ public class ProjectAdminController {
             @ApiResponse(responseCode = "401", description = "Non authentifié", content = @Content)
     })
     @GetMapping("/{id}/highlights")
-    public List<ProjectHighlightDto> listHighlights(@Parameter(description = "Identifiant du projet") @PathVariable("id") Long id) {
+    public List<ProjectHighlightDto> listHighlights(@Parameter(description = "Identifiant du projet") @PathVariable("id") String id) {
         return service.listHighlights(id);
     }
 
@@ -121,7 +121,7 @@ public class ProjectAdminController {
     })
     @PostMapping("/{id}/highlights")
     @ResponseStatus(HttpStatus.CREATED)
-    public ProjectHighlightDto addHighlight(@Parameter(description = "Identifiant du projet") @PathVariable("id") Long id,
+    public ProjectHighlightDto addHighlight(@Parameter(description = "Identifiant du projet") @PathVariable("id") String id,
                                            @Valid @RequestBody ProjectHighlightDto dto) {
         return service.addHighlight(id, dto);
     }
@@ -135,8 +135,8 @@ public class ProjectAdminController {
             @ApiResponse(responseCode = "401", description = "Non authentifié", content = @Content)
     })
     @PutMapping("/{id}/highlights/{childId}")
-    public ProjectHighlightDto updateHighlight(@Parameter(description = "Identifiant du projet") @PathVariable("id") Long id,
-                                              @Parameter(description = "Identifiant du point clé") @PathVariable("childId") Long childId,
+    public ProjectHighlightDto updateHighlight(@Parameter(description = "Identifiant du projet") @PathVariable("id") String id,
+                                              @Parameter(description = "Identifiant du point clé") @PathVariable("childId") String childId,
                                               @Valid @RequestBody ProjectHighlightDto dto) {
         return service.updateHighlight(id, childId, dto);
     }
@@ -149,8 +149,8 @@ public class ProjectAdminController {
     })
     @DeleteMapping("/{id}/highlights/{childId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteHighlight(@Parameter(description = "Identifiant du projet") @PathVariable("id") Long id,
-                                @Parameter(description = "Identifiant du point clé") @PathVariable("childId") Long childId) {
+    public void deleteHighlight(@Parameter(description = "Identifiant du projet") @PathVariable("id") String id,
+                                @Parameter(description = "Identifiant du point clé") @PathVariable("childId") String childId) {
         service.deleteHighlight(id, childId);
     }
 
@@ -163,7 +163,7 @@ public class ProjectAdminController {
     })
     @PatchMapping("/{id}/highlights/reorder")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void reorderHighlights(@Parameter(description = "Identifiant du projet") @PathVariable("id") Long id,
+    public void reorderHighlights(@Parameter(description = "Identifiant du projet") @PathVariable("id") String id,
                                   @Valid @RequestBody ReorderRequest request) {
         service.reorderHighlights(id, request);
     }

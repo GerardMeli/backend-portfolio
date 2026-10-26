@@ -6,7 +6,7 @@ import java.util.*;
 
 /** Utilisé en entrée (id nul) et en sortie. Textes traduisibles : {"fr": "...", "en": "..."}. visible nul = true. */
 public record ProfileDto(
-        Long id,
+        String id,
         @NotBlank @Size(max = 150) String fullName,
         Map<String, String> headline,
         Map<String, String> summary,

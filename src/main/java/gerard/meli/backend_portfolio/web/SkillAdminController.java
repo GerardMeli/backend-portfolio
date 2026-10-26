@@ -45,7 +45,7 @@ public class SkillAdminController {
             @ApiResponse(responseCode = "401", description = "Non authentifié", content = @Content)
     })
     @GetMapping("/{id}")
-    public SkillCategoryDto get(@Parameter(description = "Identifiant de la catégorie") @PathVariable("id") Long id) {
+    public SkillCategoryDto get(@Parameter(description = "Identifiant de la catégorie") @PathVariable("id") String id) {
         return service.get(id);
     }
 
@@ -71,7 +71,7 @@ public class SkillAdminController {
             @ApiResponse(responseCode = "401", description = "Non authentifié", content = @Content)
     })
     @PutMapping("/{id}")
-    public SkillCategoryDto update(@Parameter(description = "Identifiant de la catégorie") @PathVariable("id") Long id,
+    public SkillCategoryDto update(@Parameter(description = "Identifiant de la catégorie") @PathVariable("id") String id,
                                    @Valid @RequestBody SkillCategoryDto dto) {
         return service.update(id, dto);
     }
@@ -84,7 +84,7 @@ public class SkillAdminController {
     })
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@Parameter(description = "Identifiant de la catégorie") @PathVariable("id") Long id) {
+    public void delete(@Parameter(description = "Identifiant de la catégorie") @PathVariable("id") String id) {
         service.delete(id);
     }
 
@@ -107,7 +107,7 @@ public class SkillAdminController {
             @ApiResponse(responseCode = "401", description = "Non authentifié", content = @Content)
     })
     @GetMapping("/{id}/skills")
-    public List<SkillDto> listSkills(@Parameter(description = "Identifiant de la catégorie") @PathVariable("id") Long id) {
+    public List<SkillDto> listSkills(@Parameter(description = "Identifiant de la catégorie") @PathVariable("id") String id) {
         return service.listSkills(id);
     }
 
@@ -121,7 +121,7 @@ public class SkillAdminController {
     })
     @PostMapping("/{id}/skills")
     @ResponseStatus(HttpStatus.CREATED)
-    public SkillDto addSkill(@Parameter(description = "Identifiant de la catégorie") @PathVariable("id") Long id,
+    public SkillDto addSkill(@Parameter(description = "Identifiant de la catégorie") @PathVariable("id") String id,
                              @Valid @RequestBody SkillDto dto) {
         return service.addSkill(id, dto);
     }
@@ -135,8 +135,8 @@ public class SkillAdminController {
             @ApiResponse(responseCode = "401", description = "Non authentifié", content = @Content)
     })
     @PutMapping("/{id}/skills/{childId}")
-    public SkillDto updateSkill(@Parameter(description = "Identifiant de la catégorie") @PathVariable("id") Long id,
-                                @Parameter(description = "Identifiant de la compétence") @PathVariable("childId") Long childId,
+    public SkillDto updateSkill(@Parameter(description = "Identifiant de la catégorie") @PathVariable("id") String id,
+                                @Parameter(description = "Identifiant de la compétence") @PathVariable("childId") String childId,
                                 @Valid @RequestBody SkillDto dto) {
         return service.updateSkill(id, childId, dto);
     }
@@ -149,8 +149,8 @@ public class SkillAdminController {
     })
     @DeleteMapping("/{id}/skills/{childId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteSkill(@Parameter(description = "Identifiant de la catégorie") @PathVariable("id") Long id,
-                            @Parameter(description = "Identifiant de la compétence") @PathVariable("childId") Long childId) {
+    public void deleteSkill(@Parameter(description = "Identifiant de la catégorie") @PathVariable("id") String id,
+                            @Parameter(description = "Identifiant de la compétence") @PathVariable("childId") String childId) {
         service.deleteSkill(id, childId);
     }
 
@@ -163,7 +163,7 @@ public class SkillAdminController {
     })
     @PatchMapping("/{id}/skills/reorder")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void reorderSkills(@Parameter(description = "Identifiant de la catégorie") @PathVariable("id") Long id,
+    public void reorderSkills(@Parameter(description = "Identifiant de la catégorie") @PathVariable("id") String id,
                               @Valid @RequestBody ReorderRequest request) {
         service.reorderSkills(id, request);
     }

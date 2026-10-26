@@ -8,7 +8,7 @@ import gerard.meli.backend_portfolio.enums.EmploymentType;
 
 /** Utilisé en entrée (id nul) et en sortie. Textes traduisibles : {"fr": "...", "en": "..."}. visible nul = true. */
 public record ExperienceDto(
-        Long id,
+        String id,
         @NotBlank @Size(max = 200) String company,
         @Size(max = 150) String location,
         @NotEmpty Map<String, String> title,

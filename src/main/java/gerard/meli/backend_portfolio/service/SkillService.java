@@ -36,7 +36,7 @@ public class SkillService {
     }
 
     @Transactional(readOnly = true)
-    public SkillCategoryDto get(Long id) {
+    public SkillCategoryDto get(String id) {
         return mapper.toDto(repository.findByIdWithSkills(id).orElseThrow(() -> notFound(id)));
     }
 
@@ -58,13 +58,13 @@ public class SkillService {
         return mapper.toDto(repository.save(entity));
     }
 
-    public SkillCategoryDto update(Long id, SkillCategoryDto dto) {
+    public SkillCategoryDto update(String id, SkillCategoryDto dto) {
         SkillCategory entity = find(id);
         mapper.update(dto, entity);
         return mapper.toDto(entity);
     }
 
-    public void delete(Long id) {
+    public void delete(String id) {
         repository.delete(find(id));
     }
 
@@ -75,12 +75,12 @@ public class SkillService {
     // ---------- Compétence ----------
 
     @Transactional(readOnly = true)
-    public List<SkillDto> listSkills(Long parentId) {
+    public List<SkillDto> listSkills(String parentId) {
         requireParent(parentId);
         return childRepository.findByCategoryIdOrderBySortOrderAsc(parentId).stream().map(childMapper::toDto).toList();
     }
 
-    public SkillDto addSkill(Long parentId, SkillDto dto) {
+    public SkillDto addSkill(String parentId, SkillDto dto) {
         SkillCategory parent = find(parentId);
         guard.check(dto.markets());
         Skill child = childMapper.toEntity(dto);
@@ -91,41 +91,41 @@ public class SkillService {
         return childMapper.toDto(childRepository.save(child));
     }
 
-    public SkillDto updateSkill(Long parentId, Long childId, SkillDto dto) {
+    public SkillDto updateSkill(String parentId, String childId, SkillDto dto) {
         Skill child = findChild(parentId, childId);
         guard.check(dto.markets());
         childMapper.update(dto, child);
         return childMapper.toDto(child);
     }
 
-    public void deleteSkill(Long parentId, Long childId) {
+    public void deleteSkill(String parentId, String childId) {
         Skill child = findChild(parentId, childId);
         child.getCategory().getSkills().remove(child);
         childRepository.delete(child);
     }
 
-    public void reorderSkills(Long parentId, ReorderRequest request) {
+    public void reorderSkills(String parentId, ReorderRequest request) {
         requireParent(parentId);
         ReorderSupport.apply(childRepository.findByCategoryIdOrderBySortOrderAsc(parentId), request.ids(), Skill::getId, Skill::setSortOrder);
     }
 
     // ---------- interne ----------
 
-    private SkillCategory find(Long id) {
+    private SkillCategory find(String id) {
         return repository.findById(id).orElseThrow(() -> notFound(id));
     }
 
-    private void requireParent(Long id) {
+    private void requireParent(String id) {
         if (!repository.existsById(id)) throw notFound(id);
     }
 
-    private Skill findChild(Long parentId, Long childId) {
+    private Skill findChild(String parentId, String childId) {
         return childRepository.findById(childId)
                 .filter(c -> c.getCategory().getId().equals(parentId))
                 .orElseThrow(() -> new NotFoundException("Compétence introuvable : " + childId));
     }
 
-    private NotFoundException notFound(Long id) {
+    private NotFoundException notFound(String id) {
         return new NotFoundException("Catégorie de compétences introuvable : " + id);
     }
 }

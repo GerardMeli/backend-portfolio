@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 import java.util.*;
 
-public interface CertificationRepository extends JpaRepository<Certification, Long> {
+public interface CertificationRepository extends JpaRepository<Certification, String> {
 
     List<Certification> findAllByOrderBySortOrderAsc();
 

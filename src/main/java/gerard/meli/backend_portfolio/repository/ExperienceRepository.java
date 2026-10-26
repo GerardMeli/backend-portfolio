@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 import java.util.*;
 
-public interface ExperienceRepository extends JpaRepository<Experience, Long> {
+public interface ExperienceRepository extends JpaRepository<Experience, String> {
 
     List<Experience> findAllByOrderBySortOrderAscStartDateDesc();
 
@@ -13,7 +13,7 @@ public interface ExperienceRepository extends JpaRepository<Experience, Long> {
     List<Experience> findAllVisibleWithTasks();
 
     @Query("select e from Experience e left join fetch e.tasks where e.id = :id")
-    Optional<Experience> findByIdWithTasks(@Param("id") Long id);
+    Optional<Experience> findByIdWithTasks(@Param("id") String id);
 
     @Query("select coalesce(max(e.sortOrder), -1) from Experience e")
     int maxSortOrder();

@@ -20,8 +20,8 @@ import org.hibernate.type.SqlTypes;
 public class CustomSection {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String id;
 
     @Column(name = "code", length = 50, nullable = false, unique = true)
     private String code;

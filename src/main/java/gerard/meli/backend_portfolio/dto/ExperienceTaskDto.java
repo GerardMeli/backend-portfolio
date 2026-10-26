@@ -5,7 +5,7 @@ import java.util.*;
 
 /** Utilisé en entrée (id nul) et en sortie. Textes traduisibles : {"fr": "...", "en": "..."}. visible nul = true. */
 public record ExperienceTaskDto(
-        Long id,
+        String id,
         @NotEmpty Map<String, String> content,
         List<String> markets,
         Integer sortOrder,

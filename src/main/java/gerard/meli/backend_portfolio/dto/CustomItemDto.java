@@ -6,7 +6,7 @@ import java.util.*;
 
 /** Utilisé en entrée (id nul) et en sortie. Textes traduisibles : {"fr": "...", "en": "..."}. visible nul = true. */
 public record CustomItemDto(
-        Long id,
+        String id,
         @NotEmpty Map<String, String> title,
         @Size(max = 200) String subtitle,
         Map<String, String> description,

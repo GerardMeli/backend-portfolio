@@ -8,7 +8,7 @@ import gerard.meli.backend_portfolio.enums.ProjectKind;
 
 /** Utilisé en entrée (id nul) et en sortie. Textes traduisibles : {"fr": "...", "en": "..."}. visible nul = true. kind nul = PERSONAL. */
 public record ProjectDto(
-        Long id,
+        String id,
         @NotBlank @Size(max = 200) String name,
         ProjectKind kind,
         Map<String, String> description,

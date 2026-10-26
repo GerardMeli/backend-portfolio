@@ -45,7 +45,7 @@ public class EducationAdminController {
             @ApiResponse(responseCode = "401", description = "Non authentifié", content = @Content)
     })
     @GetMapping("/{id}")
-    public EducationDto get(@Parameter(description = "Identifiant de la formation") @PathVariable("id") Long id) {
+    public EducationDto get(@Parameter(description = "Identifiant de la formation") @PathVariable("id") String id) {
         return service.get(id);
     }
 
@@ -71,7 +71,7 @@ public class EducationAdminController {
             @ApiResponse(responseCode = "401", description = "Non authentifié", content = @Content)
     })
     @PutMapping("/{id}")
-    public EducationDto update(@Parameter(description = "Identifiant de la formation") @PathVariable("id") Long id,
+    public EducationDto update(@Parameter(description = "Identifiant de la formation") @PathVariable("id") String id,
                                @Valid @RequestBody EducationDto dto) {
         return service.update(id, dto);
     }
@@ -84,7 +84,7 @@ public class EducationAdminController {
     })
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@Parameter(description = "Identifiant de la formation") @PathVariable("id") Long id) {
+    public void delete(@Parameter(description = "Identifiant de la formation") @PathVariable("id") String id) {
         service.delete(id);
     }
 

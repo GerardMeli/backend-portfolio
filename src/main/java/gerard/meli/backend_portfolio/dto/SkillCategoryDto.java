@@ -6,7 +6,7 @@ import java.util.*;
 
 /** Utilisé en entrée (id nul) et en sortie. Textes traduisibles : {"fr": "...", "en": "..."}. visible nul = true. */
 public record SkillCategoryDto(
-        Long id,
+        String id,
         @NotEmpty Map<String, String> name,
         Integer sortOrder,
         Boolean visible,

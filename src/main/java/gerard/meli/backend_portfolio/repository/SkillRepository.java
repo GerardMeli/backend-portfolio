@@ -5,10 +5,10 @@ import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 import java.util.*;
 
-public interface SkillRepository extends JpaRepository<Skill, Long> {
+public interface SkillRepository extends JpaRepository<Skill, String> {
 
-    List<Skill> findByCategoryIdOrderBySortOrderAsc(Long categoryId);
+    List<Skill> findByCategoryIdOrderBySortOrderAsc(String categoryId);
 
     @Query("select coalesce(max(s.sortOrder), -1) from Skill s where s.category.id = :categoryId")
-    int maxSortOrder(@Param("categoryId") Long categoryId);
+    int maxSortOrder(@Param("categoryId") String categoryId);
 }

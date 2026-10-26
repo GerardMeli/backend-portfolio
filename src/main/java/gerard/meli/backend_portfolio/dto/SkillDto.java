@@ -5,8 +5,8 @@ import java.util.*;
 
 /** Utilisé en entrée (id nul) et en sortie. Textes traduisibles : {"fr": "...", "en": "..."}. visible nul = true. */
 public record SkillDto(
-        Long id,
-        Long categoryId,
+        String id,
+        String categoryId,
         @NotBlank @Size(max = 100) String name,
         @Min(1) @Max(5) Short level,
         List<String> markets,

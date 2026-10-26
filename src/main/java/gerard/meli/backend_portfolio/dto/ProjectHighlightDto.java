@@ -5,7 +5,7 @@ import java.util.*;
 
 /** Utilisé en entrée (id nul) et en sortie. Textes traduisibles : {"fr": "...", "en": "..."}. visible nul = true. */
 public record ProjectHighlightDto(
-        Long id,
+        String id,
         @NotEmpty Map<String, String> content,
         Integer sortOrder,
         Boolean visible

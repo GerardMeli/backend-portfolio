@@ -46,7 +46,7 @@ public class CustomSectionService {
     }
 
     @Transactional(readOnly = true)
-    public CustomSectionDto get(Long id) {
+    public CustomSectionDto get(String id) {
         return mapper.toDto(repository.findByIdWithItems(id).orElseThrow(() -> notFound(id)));
     }
 
@@ -87,7 +87,7 @@ public class CustomSectionService {
     }
 
     /** Le code n'est pas modifiable. Les éléments se gèrent via leurs propres méthodes. */
-    public CustomSectionDto update(Long id, CustomSectionDto dto) {
+    public CustomSectionDto update(String id, CustomSectionDto dto) {
         CustomSection section = find(id);
         guard.check(dto.markets());
         mapper.update(dto, section);
@@ -95,7 +95,7 @@ public class CustomSectionService {
     }
 
     /** Supprime la section, ses éléments et sa présence dans la config de tous les marchés. */
-    public void delete(Long id) {
+    public void delete(String id) {
         String code = find(id).getCode();
         marketSectionRepository.deleteBySectionType(code);
         repository.deleteById(id);
@@ -104,12 +104,12 @@ public class CustomSectionService {
     // ---------- Éléments ----------
 
     @Transactional(readOnly = true)
-    public List<CustomItemDto> listItems(Long sectionId) {
+    public List<CustomItemDto> listItems(String sectionId) {
         requireSection(sectionId);
         return itemRepository.findBySectionIdOrderBySortOrderAsc(sectionId).stream().map(itemMapper::toDto).toList();
     }
 
-    public CustomItemDto addItem(Long sectionId, CustomItemDto dto) {
+    public CustomItemDto addItem(String sectionId, CustomItemDto dto) {
         CustomSection section = find(sectionId);
         guard.check(dto.markets());
         CustomItem item = itemMapper.toEntity(dto);
@@ -120,20 +120,20 @@ public class CustomSectionService {
         return itemMapper.toDto(itemRepository.save(item));
     }
 
-    public CustomItemDto updateItem(Long sectionId, Long itemId, CustomItemDto dto) {
+    public CustomItemDto updateItem(String sectionId, String itemId, CustomItemDto dto) {
         CustomItem item = findItem(sectionId, itemId);
         guard.check(dto.markets());
         itemMapper.update(dto, item);
         return itemMapper.toDto(item);
     }
 
-    public void deleteItem(Long sectionId, Long itemId) {
+    public void deleteItem(String sectionId, String itemId) {
         CustomItem item = findItem(sectionId, itemId);
         item.getSection().getItems().remove(item);
         itemRepository.delete(item);
     }
 
-    public void reorderItems(Long sectionId, ReorderRequest request) {
+    public void reorderItems(String sectionId, ReorderRequest request) {
         requireSection(sectionId);
         ReorderSupport.apply(itemRepository.findBySectionIdOrderBySortOrderAsc(sectionId), request.ids(),
                 CustomItem::getId, CustomItem::setSortOrder);
@@ -141,21 +141,21 @@ public class CustomSectionService {
 
     // ---------- interne ----------
 
-    private CustomSection find(Long id) {
+    private CustomSection find(String id) {
         return repository.findById(id).orElseThrow(() -> notFound(id));
     }
 
-    private void requireSection(Long id) {
+    private void requireSection(String id) {
         if (!repository.existsById(id)) throw notFound(id);
     }
 
-    private CustomItem findItem(Long sectionId, Long itemId) {
+    private CustomItem findItem(String sectionId, String itemId) {
         return itemRepository.findById(itemId)
                 .filter(i -> i.getSection().getId().equals(sectionId))
                 .orElseThrow(() -> new NotFoundException("Élément introuvable : " + itemId));
     }
 
-    private NotFoundException notFound(Long id) {
+    private NotFoundException notFound(String id) {
         return new NotFoundException("Section personnalisée introuvable : " + id);
     }
 }

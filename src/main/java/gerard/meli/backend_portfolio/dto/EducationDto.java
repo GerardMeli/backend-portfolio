@@ -6,7 +6,7 @@ import java.util.*;
 
 /** Utilisé en entrée (id nul) et en sortie. Textes traduisibles : {"fr": "...", "en": "..."}. visible nul = true. */
 public record EducationDto(
-        Long id,
+        String id,
         @NotBlank @Size(max = 200) String institution,
         @Size(max = 150) String location,
         @NotEmpty Map<String, String> degree,
