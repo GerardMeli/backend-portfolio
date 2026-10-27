@@ -16,6 +16,17 @@ CREATE TABLE IF NOT EXISTS app_user (
     created_at    TIMESTAMPTZ  NOT NULL DEFAULT now()
 );
 
+-- Jetons de rafraîchissement opaques : seul leur hash SHA-256 est stocké.
+CREATE TABLE IF NOT EXISTS refresh_token (
+    id         VARCHAR(255) PRIMARY KEY,
+    user_id    VARCHAR(255) NOT NULL REFERENCES app_user(id) ON DELETE CASCADE,
+    token_hash VARCHAR(64) NOT NULL UNIQUE,
+    expires_at TIMESTAMPTZ NOT NULL,
+    revoked_at TIMESTAMPTZ,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS idx_refresh_token_user ON refresh_token(user_id);
+
 -- ---------- Profil (une seule ligne) ----------
 CREATE TABLE IF NOT EXISTS profile (
     id                 VARCHAR(255) PRIMARY KEY,

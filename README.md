@@ -48,7 +48,7 @@ Au démarrage, `schema.sql` crée les tables si elles n'existent pas et insère 
 
 3. Ouvrir Swagger : http://localhost:8080/swagger-ui.html
 
-Compte local par défaut : `admin@portfolio.local` / `ChangeMe123!`, créé automatiquement si aucun compte n'existe.
+Au premier démarrage, l'administrateur est créé uniquement lorsque `ADMIN_EMAIL` et `ADMIN_PASSWORD` sont fournis.
 
 Un guide de test pas à pas est fourni dans `swagger-test-guide.md`.
 
@@ -56,19 +56,21 @@ Un guide de test pas à pas est fourni dans `swagger-test-guide.md`.
 
 Tout se règle dans `src/main/resources/application.yml`, surchargeable par variables d'environnement.
 
-| Variable | Rôle | Défaut local |
+| Variable | Rôle | Défaut |
 |---|---|---|
 | `SPRING_PROFILES_ACTIVE` | `local` ou `prod` | `local` |
 | `DB_URL` | URL JDBC | `jdbc:postgresql://localhost:5432/portfolio` |
-| `DB_USERNAME` / `DB_PASSWORD` | accès base | `postgres` / `postgres` |
-| `JWT_SECRET` | secret de signature, 32 caractères minimum | valeur de test |
-| `JWT_EXPIRATION_MINUTES` | durée de vie du jeton | `120` |
-| `ADMIN_EMAIL` / `ADMIN_PASSWORD` | compte admin créé au premier démarrage | valeurs de test |
+| `DB_USERNAME` / `DB_PASSWORD` | accès base | `postgres` / obligatoire |
+| `JWT_SECRET` | secret de signature aléatoire, 32 octets minimum | obligatoire |
+| `JWT_EXPIRATION_MINUTES` | durée de vie du jeton d'accès | `15` |
+| `JWT_REFRESH_EXPIRATION_DAYS` | durée du refresh token rotatif | `7` |
+| `JWT_REFRESH_COOKIE_SECURE` | impose HTTPS pour le cookie de refresh | `true` |
+| `ADMIN_EMAIL` / `ADMIN_PASSWORD` | compte admin créé au premier démarrage | obligatoires pour l'initialisation |
 | `CORS_ALLOWED_ORIGINS` | origines autorisées, séparées par des virgules | `http://localhost:4200` |
 | `SWAGGER_ENABLED` | active Swagger | `true` |
 | `PORT` | port HTTP | `8080` |
 
-En profil `prod`, l'application **refuse de démarrer** si `JWT_SECRET` ou `ADMIN_PASSWORD` gardent leur valeur par défaut.
+L'application ne possède plus de secret, mot de passe base ou mot de passe administrateur par défaut. `JWT_SECRET` et `DB_PASSWORD` sont obligatoires au démarrage.
 
 ## Structure
 
@@ -95,7 +97,9 @@ Ressources : `application.yml` et `schema.sql` dans `src/main/resources/`.
 |---|---|---|
 | GET | `/api/public/markets` | marchés du sélecteur |
 | GET | `/api/public/portfolio?market=CANADA&lang=en` | CV adapté (paramètres facultatifs) |
-| POST | `/api/auth/login` | connexion, renvoie un jeton JWT |
+| POST | `/api/auth/login` | connexion, renvoie un JWT et un cookie HttpOnly de refresh |
+| POST | `/api/auth/refresh` | renouvelle le JWT et fait tourner le refresh token |
+| POST | `/api/auth/logout` | révoque et efface le refresh token |
 
 ### Admin (en-tête `Authorization: Bearer <jeton>`)
 

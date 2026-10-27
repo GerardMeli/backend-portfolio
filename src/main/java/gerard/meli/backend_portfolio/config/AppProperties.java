@@ -8,8 +8,10 @@ import org.springframework.boot.context.properties.bind.DefaultValue;
 @ConfigurationProperties(prefix = "app")
 public record AppProperties(Jwt jwt, Admin admin, Cors cors) {
 
-    /** secret : 32 caractères minimum ; expirationMinutes : durée de vie du jeton. */
-    public record Jwt(String secret, @DefaultValue("120") long expirationMinutes) {
+    /** secret : 32 caractères minimum ; durée des jetons d'accès et de rafraîchissement. */
+    public record Jwt(String secret, @DefaultValue("15") long expirationMinutes,
+                      @DefaultValue("7") long refreshExpirationDays,
+                      @DefaultValue("true") boolean refreshCookieSecure) {
     }
 
     /** Compte administrateur créé au premier démarrage si aucun n'existe. */

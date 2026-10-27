@@ -3,6 +3,7 @@ package gerard.meli.backend_portfolio.config;
 import gerard.meli.backend_portfolio.security.JwtAuthenticationFilter;
 import gerard.meli.backend_portfolio.security.JwtService;
 import gerard.meli.backend_portfolio.security.SecurityErrorHandler;
+import gerard.meli.backend_portfolio.repository.AppUserRepository;
 import java.util.List;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -27,7 +28,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http, JwtService jwtService) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http, JwtService jwtService, AppUserRepository userRepository) throws Exception {
         SecurityErrorHandler errorHandler = new SecurityErrorHandler();
 
         http
@@ -40,7 +41,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/error").permitAll()
-                        .requestMatchers("/api/public/**", "/api/auth/login").permitAll()
+                        .requestMatchers("/api/public/**", "/api/auth/login", "/api/auth/refresh", "/api/auth/logout").permitAll()
                         .requestMatchers("/actuator/health", "/actuator/health/**").permitAll()
                         .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
@@ -49,7 +50,7 @@ public class SecurityConfig {
                         .authenticationEntryPoint(errorHandler)
                         .accessDeniedHandler(errorHandler))
                 // Non déclaré comme @Component pour ne pas être enregistré une deuxième fois comme filtre servlet
-                .addFilterBefore(new JwtAuthenticationFilter(jwtService), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new JwtAuthenticationFilter(jwtService, userRepository), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
@@ -68,6 +69,7 @@ public class SecurityConfig {
         config.setAllowedOrigins(origins);
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept", "Accept-Language"));
+        config.setAllowCredentials(true);
         config.setMaxAge(3600L);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

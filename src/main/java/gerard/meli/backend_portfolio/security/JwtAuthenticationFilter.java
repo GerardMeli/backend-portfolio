@@ -1,6 +1,7 @@
 package gerard.meli.backend_portfolio.security;
 
 import gerard.meli.backend_portfolio.security.JwtService;
+import gerard.meli.backend_portfolio.repository.AppUserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,9 +23,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private static final String PREFIX = "Bearer ";
 
     private final JwtService jwtService;
+    private final AppUserRepository userRepository;
 
-    public JwtAuthenticationFilter(JwtService jwtService) {
+    public JwtAuthenticationFilter(JwtService jwtService, AppUserRepository userRepository) {
         this.jwtService = jwtService;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -33,7 +36,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String header = request.getHeader(HttpHeaders.AUTHORIZATION);
         if (header != null && header.startsWith(PREFIX)
                 && SecurityContextHolder.getContext().getAuthentication() == null) {
-            jwtService.subjectOf(header.substring(PREFIX.length()).trim()).ifPresent(subject -> {
+            jwtService.subjectOf(header.substring(PREFIX.length()).trim())
+                    .filter(subject -> userRepository.existsByEmailIgnoreCase(subject))
+                    .ifPresent(subject -> {
                 var authentication = new UsernamePasswordAuthenticationToken(
                         subject, null, List.of(new SimpleGrantedAuthority("ROLE_ADMIN")));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
