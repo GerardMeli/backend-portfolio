@@ -13,6 +13,8 @@ public final class SectionTitles {
             SectionTypes.EDUCATION, Map.of("fr", "Formation", "en", "Education"),
             SectionTypes.PROJECT, Map.of("fr", "Projets", "en", "Projects"),
             SectionTypes.SKILL, Map.of("fr", "Compétences", "en", "Skills"),
+            SectionTypes.PERSONAL_SKILL, Map.of("fr", "Compétences personnelles", "en", "Personal skills"),
+            SectionTypes.PROFESSIONAL_SKILL, Map.of("fr", "Compétences professionnelles", "en", "Professional skills"),
             SectionTypes.CERTIFICATION, Map.of("fr", "Certifications", "en", "Certifications"),
             SectionTypes.LANGUAGE, Map.of("fr", "Langues", "en", "Languages"));
 

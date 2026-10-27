@@ -7,6 +7,8 @@ public final class SectionTypes {
     public static final String EDUCATION = "EDUCATION";
     public static final String PROJECT = "PROJECT";
     public static final String SKILL = "SKILL";
+    public static final String PERSONAL_SKILL = "PERSONAL_SKILL";
+    public static final String PROFESSIONAL_SKILL = "PROFESSIONAL_SKILL";
     public static final String CERTIFICATION = "CERTIFICATION";
     public static final String LANGUAGE = "LANGUAGE";
 

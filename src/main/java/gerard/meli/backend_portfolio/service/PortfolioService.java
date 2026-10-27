@@ -3,6 +3,7 @@ package gerard.meli.backend_portfolio.service;
 import gerard.meli.backend_portfolio.domain.*;
 import gerard.meli.backend_portfolio.dto.*;
 import gerard.meli.backend_portfolio.enums.SectionTypes;
+import gerard.meli.backend_portfolio.enums.SkillCategoryType;
 import gerard.meli.backend_portfolio.exception.*;
 import gerard.meli.backend_portfolio.mapper.*;
 import gerard.meli.backend_portfolio.repository.*;
@@ -113,9 +114,9 @@ public class PortfolioService {
             case SectionTypes.PROJECT -> projectRepository.findAllVisibleWithHighlights().stream()
                     .filter(p -> ctx.allows(p.getMarkets()))
                     .map(p -> projectMapper.toView(p, ctx)).toList();
-            case SectionTypes.SKILL -> skillCategoryRepository.findAllVisibleWithSkills().stream()
-                    .map(c -> skillCategoryMapper.toView(c, ctx))
-                    .filter(g -> !g.skills().isEmpty()).toList();
+            case SectionTypes.SKILL -> skillGroups(ctx, null);
+            case SectionTypes.PERSONAL_SKILL -> skillGroups(ctx, SkillCategoryType.PERSONAL);
+            case SectionTypes.PROFESSIONAL_SKILL -> skillGroups(ctx, SkillCategoryType.PROFESSIONAL);
             case SectionTypes.CERTIFICATION -> certificationRepository.findByVisibleTrueOrderBySortOrderAsc().stream()
                     .filter(c -> ctx.allows(c.getMarkets()))
                     .map(c -> certificationMapper.toView(c, ctx)).toList();
@@ -130,6 +131,13 @@ public class PortfolioService {
         CustomSection custom = customByCode.get(type);
         String title = custom != null ? ctx.text(custom.getTitle()) : SectionTitles.of(type, language);
         return Optional.of(new SectionView(type, title, new ArrayList<Object>(items)));
+    }
+
+    private List<SkillGroupView> skillGroups(ViewContext ctx, SkillCategoryType type) {
+        return skillCategoryRepository.findAllVisibleWithSkills().stream()
+                .filter(category -> type == null || category.getType() == type)
+                .map(category -> skillCategoryMapper.toView(category, ctx))
+                .filter(group -> !group.skills().isEmpty()).toList();
     }
 
     private List<String> summary(Profile profile, ViewContext ctx) {

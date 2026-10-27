@@ -16,7 +16,7 @@ public class SkillCategoryMapper {
 
     public SkillCategoryDto toDto(SkillCategory c) {
         List<SkillDto> skills = c.getSkills().stream().map(skillMapper::toDto).toList();
-        return new SkillCategoryDto(c.getId(), c.getName(), c.getSortOrder(), c.isVisible(), skills);
+        return new SkillCategoryDto(c.getId(), c.getName(), c.getType(), c.getSortOrder(), c.isVisible(), skills);
     }
 
     /** Création : crée aussi les compétences fournies dans le DTO. */
@@ -32,6 +32,7 @@ public class SkillCategoryMapper {
     /** Mise à jour : ne touche pas aux compétences. */
     public void update(SkillCategoryDto d, SkillCategory c) {
         c.setName(MapperUtils.copy(d.name()));
+        if (d.type() != null) c.setType(d.type());
         if (d.sortOrder() != null) c.setSortOrder(d.sortOrder());
         c.setVisible(MapperUtils.orElse(d.visible(), c.isVisible()));
     }

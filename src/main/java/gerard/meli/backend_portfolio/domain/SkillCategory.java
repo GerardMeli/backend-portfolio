@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import java.time.*;
 import java.util.*;
 
+import gerard.meli.backend_portfolio.enums.SkillCategoryType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,6 +27,10 @@ public class SkillCategory {
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "name", columnDefinition = "jsonb", nullable = false)
     private Map<String, String> name;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "category_type", nullable = false, length = 20)
+    private SkillCategoryType type = SkillCategoryType.PROFESSIONAL;
 
     @Column(name = "position", nullable = false)
     private Integer sortOrder = 0;

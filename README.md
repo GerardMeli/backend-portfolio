@@ -23,6 +23,8 @@ Le visiteur choisit un marché dans le frontend. Le backend renvoie un CV déjà
 
 Les textes traduisibles sont stockés en JSONB : `{"fr": "...", "en": "..."}`.
 
+Les catégories de compétences acceptent le champ `type` (`PERSONAL` ou `PROFESSIONAL`) via l'API admin. Le CV public les présente dans deux sections distinctes : `PERSONAL_SKILL` et `PROFESSIONAL_SKILL`. Les anciennes catégories sans type sont considérées comme professionnelles.
+
 ## Prérequis
 
 - JDK 21
