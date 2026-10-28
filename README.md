@@ -105,7 +105,7 @@ Ressources : `application.yml` et `schema.sql` dans `src/main/resources/`.
 
 ### Admin (en-tête `Authorization: Bearer <jeton>`)
 
-Pour chaque ressource : `GET`, `GET /{id}`, `POST`, `PUT /{id}`, `DELETE /{id}` et `PATCH /reorder` avec `{"ids": [3, 1, 2]}`.
+Pour chaque ressource : `GET`, `GET /{id}`, `POST`, `PUT /{id}`, `DELETE /{id}` et `PATCH /reorder` avec `{"ids": ["id-1", "id-2"]}`. Les endpoints de réordonnancement acceptent aussi directement le tableau JSON `["id-1", "id-2"]`.
 
 | Ressource | Chemin | Sous-ressource |
 |---|---|---|
