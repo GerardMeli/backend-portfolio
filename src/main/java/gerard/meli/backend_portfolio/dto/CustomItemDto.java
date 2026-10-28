@@ -12,7 +12,7 @@ public record CustomItemDto(
         Map<String, String> description,
         LocalDate startDate,
         LocalDate endDate,
-        @Size(max = 500) String url,
+        @Size(max = 500) @Pattern(regexp = "^https?://.+", message = "doit commencer par http:// ou https://") String url,
         List<String> markets,
         Integer sortOrder,
         Boolean visible

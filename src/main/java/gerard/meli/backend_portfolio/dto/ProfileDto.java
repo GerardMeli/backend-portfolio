@@ -14,13 +14,13 @@ public record ProfileDto(
         @Size(max = 50) String phone,
         @Size(max = 100) String city,
         @Size(max = 100) String country,
-        @Size(max = 500) String photoUrl,
+        @Size(max = 500) @Pattern(regexp = "^https?://.+", message = "doit commencer par http:// ou https://") String photoUrl,
         LocalDate birthDate,
         @Size(max = 100) String nationality,
         @Size(max = 50) String maritalStatus,
         Map<String, String> workAuthorization,
-        @Size(max = 500) String linkedinUrl,
-        @Size(max = 500) String githubUrl,
-        @Size(max = 500) String websiteUrl
+        @Size(max = 500) @Pattern(regexp = "^https?://.+", message = "doit commencer par http:// ou https://") String linkedinUrl,
+        @Size(max = 500) @Pattern(regexp = "^https?://.+", message = "doit commencer par http:// ou https://") String githubUrl,
+        @Size(max = 500) @Pattern(regexp = "^https?://.+", message = "doit commencer par http:// ou https://") String websiteUrl
 ) {
 }

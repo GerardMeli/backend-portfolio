@@ -11,7 +11,7 @@ public record CertificationDto(
         @Size(max = 200) String issuer,
         LocalDate issuedOn,
         LocalDate expiresOn,
-        @Size(max = 500) String credentialUrl,
+        @Size(max = 500) @Pattern(regexp = "^https?://.+", message = "doit commencer par http:// ou https://") String credentialUrl,
         List<String> markets,
         Integer sortOrder,
         Boolean visible

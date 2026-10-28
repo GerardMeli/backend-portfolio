@@ -110,3 +110,32 @@ logging:
     root: WARN
     gerard.meli.backend_portfolio: INFO
     org.springframework.security: ${LOG_LEVEL_SECURITY:DEBUG}
+
+
+
+---
+# ===================== PRODUCTION =====================
+# Variables obligatoires : DB_URL, DB_USERNAME, DB_PASSWORD, JWT_SECRET,
+# ADMIN_EMAIL, ADMIN_PASSWORD, CORS_ALLOWED_ORIGINS
+# Neon/Supabase : DB_URL=jdbc:postgresql://HOTE/BASE?sslmode=require
+spring:
+  config:
+    activate:
+      on-profile: prod
+  jpa:
+    show-sql: false
+
+server:
+  forward-headers-strategy: framework   # derrière le proxy de l'hébergeur : HTTPS et en-têtes corrects
+
+# Swagger désactivé en production, sauf SWAGGER_ENABLED=true
+springdoc:
+  api-docs:
+    enabled: ${SWAGGER_ENABLED:false}
+  swagger-ui:
+    enabled: ${SWAGGER_ENABLED:false}
+
+logging:
+  level:
+    root: WARN
+    gerard.meli.backend_portfolio: INFO
