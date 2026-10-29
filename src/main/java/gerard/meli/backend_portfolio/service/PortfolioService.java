@@ -6,6 +6,7 @@ import gerard.meli.backend_portfolio.enums.SectionTypes;
 import gerard.meli.backend_portfolio.exception.*;
 import gerard.meli.backend_portfolio.mapper.*;
 import gerard.meli.backend_portfolio.repository.*;
+import org.springframework.beans.factory.annotation.Value;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +18,8 @@ import java.util.*;
 @RequiredArgsConstructor
 public class PortfolioService {
 
-    private final String defaultMarket;
+    @Value("${app.markets.default:AFRICA}")
+    private String defaultMarket;
     private final MarketRepository marketRepository;
     private final MarketSectionRepository marketSectionRepository;
     private final ProfileRepository profileRepository;
