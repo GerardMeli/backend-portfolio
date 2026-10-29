@@ -2,6 +2,7 @@ package gerard.meli.backend_portfolio.mapper;
 
 import gerard.meli.backend_portfolio.domain.*;
 import gerard.meli.backend_portfolio.dto.*;
+import gerard.meli.backend_portfolio.enums.SkillKind;
 import org.springframework.stereotype.Component;
 import java.util.*;
 
@@ -16,7 +17,7 @@ public class SkillCategoryMapper {
 
     public SkillCategoryDto toDto(SkillCategory c) {
         List<SkillDto> skills = c.getSkills().stream().map(skillMapper::toDto).toList();
-        return new SkillCategoryDto(c.getId(), c.getName(), c.getType(), c.getSortOrder(), c.isVisible(), skills);
+        return new SkillCategoryDto(c.getId(), c.getName(), c.getKind(), c.getSortOrder(), c.isVisible(), skills);
     }
 
     /** Création : crée aussi les compétences fournies dans le DTO. */
@@ -32,7 +33,7 @@ public class SkillCategoryMapper {
     /** Mise à jour : ne touche pas aux compétences. */
     public void update(SkillCategoryDto d, SkillCategory c) {
         c.setName(MapperUtils.copy(d.name()));
-        if (d.type() != null) c.setType(d.type());
+        c.setKind(d.kind() != null ? d.kind() : SkillKind.PROFESSIONAL);
         if (d.sortOrder() != null) c.setSortOrder(d.sortOrder());
         c.setVisible(MapperUtils.orElse(d.visible(), c.isVisible()));
     }
@@ -44,6 +45,6 @@ public class SkillCategoryMapper {
                 .sorted(Comparator.comparing(Skill::getSortOrder))
                 .map(skillMapper::toView)
                 .toList();
-        return new SkillGroupView(ctx.text(c.getName()), skills);
+        return new SkillGroupView(ctx.text(c.getName()), c.getKind(), skills);
     }
 }

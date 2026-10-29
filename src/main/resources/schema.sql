@@ -139,13 +139,18 @@ CREATE TABLE IF NOT EXISTS project_highlight (
 
 -- ---------- Compétences ----------
 CREATE TABLE IF NOT EXISTS skill_category (
-    id            VARCHAR(255) PRIMARY KEY,
-    name          JSONB NOT NULL,             -- Backend, Frontend, Base de données...
-    category_type VARCHAR(20) NOT NULL DEFAULT 'PROFESSIONAL' CHECK (category_type IN ('PERSONAL', 'PROFESSIONAL')),
-    position      INT NOT NULL DEFAULT 0,
-    visible       BOOLEAN NOT NULL DEFAULT TRUE
+    id       VARCHAR(255) PRIMARY KEY,
+    name     JSONB NOT NULL,             -- Backend, Frontend, Base de données...
+    kind     VARCHAR(20) NOT NULL DEFAULT 'PROFESSIONAL',
+    position INT NOT NULL DEFAULT 0,
+    visible  BOOLEAN NOT NULL DEFAULT TRUE
 );
-ALTER TABLE skill_category ADD COLUMN IF NOT EXISTS category_type VARCHAR(20) NOT NULL DEFAULT 'PROFESSIONAL';
+
+ALTER TABLE skill_category ADD COLUMN IF NOT EXISTS kind VARCHAR(20) NOT NULL DEFAULT 'PROFESSIONAL';
+-- to_jsonb(row) makes the legacy-column lookup safe when category_type is absent.
+UPDATE skill_category
+SET kind = COALESCE(to_jsonb(skill_category) ->> 'category_type', kind);
+ALTER TABLE skill_category DROP COLUMN IF EXISTS category_type;
 
 CREATE TABLE IF NOT EXISTS skill (
     id          VARCHAR(255) PRIMARY KEY,
@@ -210,36 +215,34 @@ CREATE INDEX IF NOT EXISTS idx_custom_item_section ON custom_item(section_id);
 
 -- ---------- Données initiales des marchés (idempotent) ----------
 INSERT INTO market (code, label, default_locale, page_format, date_format, show_photo, show_personal_details, max_pages, notes) VALUES
- ('AFRICA', 'Afrique francophone', 'fr', 'A4',     'MM/yyyy',  FALSE,  TRUE,  2, 'Photo et état civil courants'),
+ ('AFRICA', 'Afrique francophone', 'fr', 'A4',     'MM/yyyy',  TRUE,  TRUE,  2, 'Photo et état civil courants'),
  ('CANADA', 'Canada',              'en', 'LETTER', 'MMM yyyy', FALSE, FALSE, 2, 'Sans photo ni infos personnelles, résultats chiffrés'),
  ('EU',     'Union européenne',    'en', 'A4',     'MM/yyyy',  FALSE, FALSE, 2, 'Style Europass, photo optionnelle')
 ON CONFLICT (code) DO NOTHING;
 
+-- Regroupe sans supprimer de données les anciennes configs en une section SKILL.
+INSERT INTO market_section (market_code, section_type, position, visible, max_items)
+SELECT market_code,
+       'SKILL',
+       MIN(position),
+       BOOL_OR(visible),
+       CASE
+           WHEN BOOL_OR(max_items IS NULL) THEN NULL
+           ELSE MAX(max_items)
+       END
+FROM market_section
+WHERE section_type IN ('SKILL', 'PERSONAL_SKILL', 'PROFESSIONAL_SKILL')
+GROUP BY market_code
+ON CONFLICT (market_code, section_type) DO UPDATE
+SET position = EXCLUDED.position,
+    visible = EXCLUDED.visible,
+    max_items = EXCLUDED.max_items;
+
+DELETE FROM market_section
+WHERE section_type IN ('PERSONAL_SKILL', 'PROFESSIONAL_SKILL');
+
 INSERT INTO market_section (market_code, section_type, position, visible) VALUES
- ('AFRICA','SUMMARY',1,TRUE),('AFRICA','EDUCATION',2,TRUE),('AFRICA','EXPERIENCE',3,TRUE),('AFRICA','PERSONAL_SKILL',4,TRUE),('AFRICA','PROFESSIONAL_SKILL',5,TRUE),('AFRICA','PROJECT',6,TRUE),('AFRICA','CERTIFICATION',7,TRUE),('AFRICA','LANGUAGE',8,TRUE),
- ('CANADA','SUMMARY',1,TRUE),('CANADA','PERSONAL_SKILL',2,TRUE),('CANADA','PROFESSIONAL_SKILL',3,TRUE),('CANADA','EXPERIENCE',4,TRUE),('CANADA','PROJECT',5,TRUE),('CANADA','EDUCATION',6,TRUE),('CANADA','CERTIFICATION',7,TRUE),('CANADA','LANGUAGE',8,TRUE),
- ('EU','SUMMARY',1,TRUE),('EU','EXPERIENCE',2,TRUE),('EU','EDUCATION',3,TRUE),('EU','PERSONAL_SKILL',4,TRUE),('EU','PROFESSIONAL_SKILL',5,TRUE),('EU','PROJECT',6,TRUE),('EU','CERTIFICATION',7,TRUE),('EU','LANGUAGE',8,TRUE)
+ ('AFRICA','SUMMARY',1,TRUE),('AFRICA','EDUCATION',2,TRUE),('AFRICA','EXPERIENCE',3,TRUE),('AFRICA','SKILL',4,TRUE),('AFRICA','PROJECT',5,TRUE),('AFRICA','CERTIFICATION',6,TRUE),('AFRICA','LANGUAGE',7,TRUE),
+ ('CANADA','SUMMARY',1,TRUE),('CANADA','SKILL',2,TRUE),('CANADA','EXPERIENCE',3,TRUE),('CANADA','PROJECT',4,TRUE),('CANADA','EDUCATION',5,TRUE),('CANADA','CERTIFICATION',6,TRUE),('CANADA','LANGUAGE',7,TRUE),
+ ('EU','SUMMARY',1,TRUE),('EU','EXPERIENCE',2,TRUE),('EU','EDUCATION',3,TRUE),('EU','SKILL',4,TRUE),('EU','PROJECT',5,TRUE),('EU','CERTIFICATION',6,TRUE),('EU','LANGUAGE',7,TRUE)
 ON CONFLICT (market_code, section_type) DO NOTHING;
-
--- Migration idempotente des anciennes sections SKILL vers les deux sections spécialisées.
-UPDATE market_section other_section
-SET position = other_section.position + 1
-FROM market_section legacy
-WHERE legacy.section_type = 'SKILL'
-  AND other_section.market_code = legacy.market_code
-  AND other_section.section_type NOT IN ('SKILL', 'PERSONAL_SKILL', 'PROFESSIONAL_SKILL')
-  AND other_section.position > legacy.position;
-
-UPDATE market_section specialized
-SET position = CASE specialized.section_type
-                   WHEN 'PERSONAL_SKILL' THEN legacy.position
-                   ELSE legacy.position + 1
-               END,
-    visible = legacy.visible,
-    max_items = legacy.max_items
-FROM market_section legacy
-WHERE legacy.section_type = 'SKILL'
-  AND specialized.market_code = legacy.market_code
-  AND specialized.section_type IN ('PERSONAL_SKILL', 'PROFESSIONAL_SKILL');
-
-DELETE FROM market_section WHERE section_type = 'SKILL';
