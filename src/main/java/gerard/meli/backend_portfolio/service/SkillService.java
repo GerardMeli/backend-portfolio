@@ -5,12 +5,14 @@ import gerard.meli.backend_portfolio.dto.*;
 import gerard.meli.backend_portfolio.exception.*;
 import gerard.meli.backend_portfolio.mapper.*;
 import gerard.meli.backend_portfolio.repository.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class SkillService {
 
     private final SkillCategoryRepository repository;
@@ -18,15 +20,6 @@ public class SkillService {
     private final SkillCategoryMapper mapper;
     private final SkillMapper childMapper;
     private final MarketGuard guard;
-
-    public SkillService(SkillCategoryRepository repository, SkillRepository childRepository,
-            SkillCategoryMapper mapper, SkillMapper childMapper, MarketGuard guard) {
-        this.repository = repository;
-        this.childRepository = childRepository;
-        this.mapper = mapper;
-        this.childMapper = childMapper;
-        this.guard = guard;
-    }
 
     // ---------- SkillCategory ----------
 

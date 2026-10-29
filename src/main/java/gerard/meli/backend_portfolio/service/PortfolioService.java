@@ -6,7 +6,7 @@ import gerard.meli.backend_portfolio.enums.SectionTypes;
 import gerard.meli.backend_portfolio.exception.*;
 import gerard.meli.backend_portfolio.mapper.*;
 import gerard.meli.backend_portfolio.repository.*;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
@@ -14,6 +14,7 @@ import java.util.*;
 /** Assemble le CV public selon le marché choisi par le visiteur. */
 @Service
 @Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class PortfolioService {
 
     private final String defaultMarket;
@@ -27,6 +28,7 @@ public class PortfolioService {
     private final CertificationRepository certificationRepository;
     private final SpokenLanguageRepository languageRepository;
     private final CustomSectionRepository customSectionRepository;
+    private final ProfilePhotoService photoService;
 
     private final MarketMapper marketMapper;
     private final ProfileMapper profileMapper;
@@ -37,38 +39,6 @@ public class PortfolioService {
     private final CertificationMapper certificationMapper;
     private final LanguageMapper languageMapper;
     private final CustomSectionMapper customSectionMapper;
-
-    public PortfolioService(@Value("${app.markets.default:AFRICA}") String defaultMarket,
-            MarketRepository marketRepository, MarketSectionRepository marketSectionRepository,
-            ProfileRepository profileRepository, ExperienceRepository experienceRepository,
-            EducationRepository educationRepository, ProjectRepository projectRepository,
-            SkillCategoryRepository skillCategoryRepository, CertificationRepository certificationRepository,
-            SpokenLanguageRepository languageRepository, CustomSectionRepository customSectionRepository,
-            MarketMapper marketMapper, ProfileMapper profileMapper, ExperienceMapper experienceMapper,
-            EducationMapper educationMapper, ProjectMapper projectMapper, SkillCategoryMapper skillCategoryMapper,
-            CertificationMapper certificationMapper, LanguageMapper languageMapper,
-            CustomSectionMapper customSectionMapper) {
-        this.defaultMarket = defaultMarket;
-        this.marketRepository = marketRepository;
-        this.marketSectionRepository = marketSectionRepository;
-        this.profileRepository = profileRepository;
-        this.experienceRepository = experienceRepository;
-        this.educationRepository = educationRepository;
-        this.projectRepository = projectRepository;
-        this.skillCategoryRepository = skillCategoryRepository;
-        this.certificationRepository = certificationRepository;
-        this.languageRepository = languageRepository;
-        this.customSectionRepository = customSectionRepository;
-        this.marketMapper = marketMapper;
-        this.profileMapper = profileMapper;
-        this.experienceMapper = experienceMapper;
-        this.educationMapper = educationMapper;
-        this.projectMapper = projectMapper;
-        this.skillCategoryMapper = skillCategoryMapper;
-        this.certificationMapper = certificationMapper;
-        this.languageMapper = languageMapper;
-        this.customSectionMapper = customSectionMapper;
-    }
 
     /** Liste des marchés pour le sélecteur du visiteur. */
     public List<MarketInfoView> listMarkets() {
@@ -86,7 +56,8 @@ public class PortfolioService {
 
         Profile profile = profileRepository.findFirstByOrderByIdAsc()
                 .orElseThrow(() -> new NotFoundException("Le profil n'est pas encore configuré."));
-        ProfileView profileView = profileMapper.toView(profile, market, ctx);
+        String photoUrl = photoService.publicUrl().orElse(profile.getPhotoUrl());
+        ProfileView profileView = profileMapper.toView(profile, market, ctx, photoUrl);
 
         Map<String, CustomSection> customByCode = new HashMap<>();
         customSectionRepository.findAllVisibleWithItems().forEach(s -> customByCode.put(s.getCode(), s));

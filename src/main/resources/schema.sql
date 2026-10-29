@@ -48,6 +48,14 @@ CREATE TABLE IF NOT EXISTS profile (
     updated_at         TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
+-- ---------- Photo de profil téléversée (une seule ligne, stockée en base) ----------
+CREATE TABLE IF NOT EXISTS profile_photo (
+    id           BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    content_type VARCHAR(50) NOT NULL,
+    data         BYTEA NOT NULL,
+    updated_at   TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
 -- ---------- Marchés et règles de rendu ----------
 CREATE TABLE IF NOT EXISTS market (
     code                  VARCHAR(20) PRIMARY KEY,           -- AFRICA, CANADA, EU

@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -19,13 +20,10 @@ import java.util.List;
 @RequestMapping("/api/admin/markets")
 @Tag(name = "Administration - Marchés", description = "Gestion des marchés et configuration des sections")
 @SecurityRequirement(name = "bearerAuth")
+@RequiredArgsConstructor
 public class MarketAdminController {
 
     private final MarketService service;
-
-    public MarketAdminController(MarketService service) {
-        this.service = service;
-    }
 
     @Operation(summary = "Lister les marchés", description = "Récupère la liste de tous les marchés")
     @ApiResponses({

@@ -6,12 +6,14 @@ import gerard.meli.backend_portfolio.enums.SectionTypes;
 import gerard.meli.backend_portfolio.exception.*;
 import gerard.meli.backend_portfolio.mapper.*;
 import gerard.meli.backend_portfolio.repository.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class CustomSectionService {
 
     private static final Set<String> RESERVED = Set.of(SectionTypes.SUMMARY, SectionTypes.EXPERIENCE,
@@ -25,18 +27,6 @@ public class CustomSectionService {
     private final CustomSectionMapper mapper;
     private final CustomItemMapper itemMapper;
     private final MarketGuard guard;
-
-    public CustomSectionService(CustomSectionRepository repository, CustomItemRepository itemRepository,
-            MarketRepository marketRepository, MarketSectionRepository marketSectionRepository,
-            CustomSectionMapper mapper, CustomItemMapper itemMapper, MarketGuard guard) {
-        this.repository = repository;
-        this.itemRepository = itemRepository;
-        this.marketRepository = marketRepository;
-        this.marketSectionRepository = marketSectionRepository;
-        this.mapper = mapper;
-        this.itemMapper = itemMapper;
-        this.guard = guard;
-    }
 
     // ---------- Sections ----------
 

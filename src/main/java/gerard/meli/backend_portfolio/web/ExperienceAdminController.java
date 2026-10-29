@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -19,13 +20,10 @@ import java.util.List;
 @RequestMapping("/api/admin/experiences")
 @Tag(name = "Administration - Expériences", description = "Gestion des expériences professionnelles")
 @SecurityRequirement(name = "bearerAuth")
+@RequiredArgsConstructor
 public class ExperienceAdminController {
 
     private final ExperienceService service;
-
-    public ExperienceAdminController(ExperienceService service) {
-        this.service = service;
-    }
 
     @Operation(summary = "Lister les expériences", description = "Récupère la liste de toutes les expériences")
     @ApiResponses({

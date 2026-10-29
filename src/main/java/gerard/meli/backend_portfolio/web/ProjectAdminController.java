@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -19,13 +20,10 @@ import java.util.List;
 @RequestMapping("/api/admin/projects")
 @Tag(name = "Administration - Projets", description = "Gestion des projets")
 @SecurityRequirement(name = "bearerAuth")
+@RequiredArgsConstructor
 public class ProjectAdminController {
 
     private final ProjectService service;
-
-    public ProjectAdminController(ProjectService service) {
-        this.service = service;
-    }
 
     @Operation(summary = "Lister les projets", description = "Récupère la liste de tous les projets")
     @ApiResponses({

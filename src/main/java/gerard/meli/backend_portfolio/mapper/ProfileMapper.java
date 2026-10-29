@@ -40,12 +40,12 @@ public class ProfileMapper {
     }
 
     /** Applique les règles du marché : photo et infos personnelles masquées si non autorisées. */
-    public ProfileView toView(Profile p, Market market, ViewContext ctx) {
+    public ProfileView toView(Profile p, Market market, ViewContext ctx, String photoUrl) {
         boolean photo = market.isShowPhoto();
         boolean personal = market.isShowPersonalDetails();
         return new ProfileView(p.getFullName(), ctx.text(p.getHeadline()), ctx.text(p.getSummary()), p.getEmail(),
                 p.getPhone(), p.getCity(), p.getCountry(),
-                photo ? p.getPhotoUrl() : null,
+                photo ? photoUrl : null,
                 personal ? p.getBirthDate() : null,
                 personal ? p.getNationality() : null,
                 personal ? p.getMaritalStatus() : null,

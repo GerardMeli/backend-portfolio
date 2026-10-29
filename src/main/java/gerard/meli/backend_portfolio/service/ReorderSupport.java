@@ -1,16 +1,16 @@
 package gerard.meli.backend_portfolio.service;
 
 import gerard.meli.backend_portfolio.exception.BadRequestException;
+import lombok.RequiredArgsConstructor;
+
 import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /** Réordonnancement : la position de chaque élément devient son index dans la liste d'ids reçue. */
+@RequiredArgsConstructor
 public final class ReorderSupport {
-
-    private ReorderSupport() {
-    }
 
     public static <T> void apply(List<T> current, List<String> ids, Function<T, String> idOf,
                                  BiConsumer<T, Integer> setPosition) {

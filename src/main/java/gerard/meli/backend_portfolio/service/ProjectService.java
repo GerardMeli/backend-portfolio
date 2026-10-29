@@ -5,12 +5,14 @@ import gerard.meli.backend_portfolio.dto.*;
 import gerard.meli.backend_portfolio.exception.*;
 import gerard.meli.backend_portfolio.mapper.*;
 import gerard.meli.backend_portfolio.repository.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class ProjectService {
 
     private final ProjectRepository repository;
@@ -18,15 +20,6 @@ public class ProjectService {
     private final ProjectMapper mapper;
     private final ProjectHighlightMapper childMapper;
     private final MarketGuard guard;
-
-    public ProjectService(ProjectRepository repository, ProjectHighlightRepository childRepository,
-            ProjectMapper mapper, ProjectHighlightMapper childMapper, MarketGuard guard) {
-        this.repository = repository;
-        this.childRepository = childRepository;
-        this.mapper = mapper;
-        this.childMapper = childMapper;
-        this.guard = guard;
-    }
 
     // ---------- Project ----------
 

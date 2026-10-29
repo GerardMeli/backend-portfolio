@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,15 +26,11 @@ import java.time.Duration;
 @RestController
 @RequestMapping("/api/auth")
 @Tag(name = "Authentification", description = "Authentification administrateur pour obtenir un jeton JWT")
+@RequiredArgsConstructor
 public class AuthController {
 
     private final AuthService authService;
     private final AppProperties properties;
-
-    public AuthController(AuthService authService, AppProperties properties) {
-        this.authService = authService;
-        this.properties = properties;
-    }
 
     @Operation(
             summary = "Connexion administrateur",

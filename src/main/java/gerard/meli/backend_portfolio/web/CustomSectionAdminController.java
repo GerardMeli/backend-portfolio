@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -19,13 +20,10 @@ import java.util.List;
 @RequestMapping("/api/admin/custom-sections")
 @Tag(name = "Administration - Sections personnalisées", description = "Gestion des sections personnalisées")
 @SecurityRequirement(name = "bearerAuth")
+@RequiredArgsConstructor
 public class CustomSectionAdminController {
 
     private final CustomSectionService service;
-
-    public CustomSectionAdminController(CustomSectionService service) {
-        this.service = service;
-    }
 
     @Operation(summary = "Lister les sections personnalisées", description = "Récupère la liste de toutes les sections personnalisées")
     @ApiResponses({

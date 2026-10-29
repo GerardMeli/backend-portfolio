@@ -16,6 +16,11 @@ spring:
       minimum-idle: 1
       connection-timeout: 20000
 
+  servlet:
+    multipart:
+      max-file-size: 2MB
+      max-request-size: 3MB
+
   sql:
     init:
       mode: always                # exécute schema.sql au démarrage (sans Flyway)

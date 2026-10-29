@@ -1,10 +1,12 @@
 package gerard.meli.backend_portfolio.service;
 
 import gerard.meli.backend_portfolio.enums.SectionTypes;
+import lombok.RequiredArgsConstructor;
 
 import java.util.Map;
 
 /** Titres des sections intégrées selon la langue (fr, en ; repli sur en). Les sections perso ont leur propre titre. */
+@RequiredArgsConstructor
 public final class SectionTitles {
 
     private static final Map<String, Map<String, String>> TITLES = Map.of(
@@ -15,9 +17,6 @@ public final class SectionTitles {
             SectionTypes.SKILL, Map.of("fr", "Compétences", "en", "Skills"),
             SectionTypes.CERTIFICATION, Map.of("fr", "Certifications", "en", "Certifications"),
             SectionTypes.LANGUAGE, Map.of("fr", "Langues", "en", "Languages"));
-
-    private SectionTitles() {
-    }
 
     public static String of(String type, String lang) {
         Map<String, String> byLang = TITLES.get(type);

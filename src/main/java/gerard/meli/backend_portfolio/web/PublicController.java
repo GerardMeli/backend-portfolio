@@ -9,19 +9,17 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/public")
 @Tag(name = "Public", description = "Endpoints publics sans authentification consommés par le frontend")
+@RequiredArgsConstructor
 public class PublicController {
 
     private final PortfolioService service;
-
-    public PublicController(PortfolioService service) {
-        this.service = service;
-    }
 
     @Operation(
             summary = "Lister les marchés disponibles",

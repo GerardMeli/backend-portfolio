@@ -5,20 +5,17 @@ import gerard.meli.backend_portfolio.dto.*;
 import gerard.meli.backend_portfolio.exception.*;
 import gerard.meli.backend_portfolio.mapper.*;
 import gerard.meli.backend_portfolio.repository.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class ProfileService {
 
     private final ProfileRepository repository;
     private final ProfileMapper mapper;
-
-    public ProfileService(ProfileRepository repository, ProfileMapper mapper) {
-        this.repository = repository;
-        this.mapper = mapper;
-    }
 
     @Transactional(readOnly = true)
     public ProfileDto get() {

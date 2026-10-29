@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -19,13 +20,10 @@ import java.util.List;
 @RequestMapping("/api/admin/educations")
 @Tag(name = "Administration - Formations", description = "Gestion des formations")
 @SecurityRequirement(name = "bearerAuth")
+@RequiredArgsConstructor
 public class EducationAdminController {
 
     private final EducationService service;
-
-    public EducationAdminController(EducationService service) {
-        this.service = service;
-    }
 
     @Operation(summary = "Lister les formations", description = "Récupère la liste de toutes les formations")
     @ApiResponses({

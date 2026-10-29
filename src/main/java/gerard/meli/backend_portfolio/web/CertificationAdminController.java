@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -19,13 +20,10 @@ import java.util.List;
 @RequestMapping("/api/admin/certifications")
 @Tag(name = "Administration - Certifications", description = "Gestion des certifications")
 @SecurityRequirement(name = "bearerAuth")
+@RequiredArgsConstructor
 public class CertificationAdminController {
 
     private final CertificationService service;
-
-    public CertificationAdminController(CertificationService service) {
-        this.service = service;
-    }
 
     @Operation(summary = "Lister les certifications", description = "Récupère la liste de toutes les certifications")
     @ApiResponses({

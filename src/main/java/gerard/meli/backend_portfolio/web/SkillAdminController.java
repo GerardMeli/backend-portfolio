@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -19,13 +20,10 @@ import java.util.List;
 @RequestMapping("/api/admin/skill-categories")
 @Tag(name = "Administration - Compétences", description = "Gestion des catégories de compétences et compétences")
 @SecurityRequirement(name = "bearerAuth")
+@RequiredArgsConstructor
 public class SkillAdminController {
 
     private final SkillService service;
-
-    public SkillAdminController(SkillService service) {
-        this.service = service;
-    }
 
     @Operation(summary = "Lister les catégories de compétences", description = "Récupère la liste de toutes les catégories de compétences")
     @ApiResponses({

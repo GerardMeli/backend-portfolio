@@ -5,21 +5,18 @@ import gerard.meli.backend_portfolio.dto.*;
 import gerard.meli.backend_portfolio.exception.*;
 import gerard.meli.backend_portfolio.mapper.*;
 import gerard.meli.backend_portfolio.repository.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class LanguageService {
 
     private final SpokenLanguageRepository repository;
     private final LanguageMapper mapper;
-
-    public LanguageService(SpokenLanguageRepository repository, LanguageMapper mapper) {
-        this.repository = repository;
-        this.mapper = mapper;
-    }
 
     @Transactional(readOnly = true)
     public List<LanguageDto> list() {

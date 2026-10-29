@@ -3,19 +3,18 @@ package gerard.meli.backend_portfolio.service;
 import gerard.meli.backend_portfolio.domain.Market;
 import gerard.meli.backend_portfolio.exception.BadRequestException;
 import gerard.meli.backend_portfolio.repository.MarketRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import java.util.*;
 import java.util.stream.Collectors;
 
 /** Vérifie que les codes de marchés utilisés dans les DTO existent. */
 @Component
+@RequiredArgsConstructor
 public class MarketGuard {
 
     private final MarketRepository marketRepository;
 
-    public MarketGuard(MarketRepository marketRepository) {
-        this.marketRepository = marketRepository;
-    }
 
     public void check(List<String> markets) {
         if (markets == null || markets.isEmpty()) return;

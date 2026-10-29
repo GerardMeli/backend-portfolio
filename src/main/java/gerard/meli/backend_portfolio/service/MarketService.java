@@ -6,12 +6,14 @@ import gerard.meli.backend_portfolio.enums.SectionTypes;
 import gerard.meli.backend_portfolio.exception.*;
 import gerard.meli.backend_portfolio.mapper.*;
 import gerard.meli.backend_portfolio.repository.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class MarketService {
 
     /** Ordre par défaut des sections intégrées pour un nouveau marché. */
@@ -24,15 +26,6 @@ public class MarketService {
     private final CustomSectionRepository customSectionRepository;
     private final MarketMapper mapper;
     private final MarketSectionMapper sectionMapper;
-
-    public MarketService(MarketRepository repository, MarketSectionRepository sectionRepository,
-            CustomSectionRepository customSectionRepository, MarketMapper mapper, MarketSectionMapper sectionMapper) {
-        this.repository = repository;
-        this.sectionRepository = sectionRepository;
-        this.customSectionRepository = customSectionRepository;
-        this.mapper = mapper;
-        this.sectionMapper = sectionMapper;
-    }
 
     @Transactional(readOnly = true)
     public List<MarketDto> list() {

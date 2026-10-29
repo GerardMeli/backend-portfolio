@@ -5,23 +5,19 @@ import gerard.meli.backend_portfolio.dto.*;
 import gerard.meli.backend_portfolio.exception.*;
 import gerard.meli.backend_portfolio.mapper.*;
 import gerard.meli.backend_portfolio.repository.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class CertificationService {
 
     private final CertificationRepository repository;
     private final CertificationMapper mapper;
     private final MarketGuard guard;
-
-    public CertificationService(CertificationRepository repository, CertificationMapper mapper, MarketGuard guard) {
-        this.repository = repository;
-        this.mapper = mapper;
-        this.guard = guard;
-    }
 
     @Transactional(readOnly = true)
     public List<CertificationDto> list() {

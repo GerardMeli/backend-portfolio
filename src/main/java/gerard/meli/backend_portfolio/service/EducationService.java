@@ -5,23 +5,19 @@ import gerard.meli.backend_portfolio.dto.*;
 import gerard.meli.backend_portfolio.exception.*;
 import gerard.meli.backend_portfolio.mapper.*;
 import gerard.meli.backend_portfolio.repository.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class EducationService {
 
     private final EducationRepository repository;
     private final EducationMapper mapper;
     private final MarketGuard guard;
-
-    public EducationService(EducationRepository repository, EducationMapper mapper, MarketGuard guard) {
-        this.repository = repository;
-        this.mapper = mapper;
-        this.guard = guard;
-    }
 
     @Transactional(readOnly = true)
     public List<EducationDto> list() {

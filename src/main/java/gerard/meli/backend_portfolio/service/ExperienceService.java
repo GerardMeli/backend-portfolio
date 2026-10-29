@@ -5,12 +5,14 @@ import gerard.meli.backend_portfolio.dto.*;
 import gerard.meli.backend_portfolio.exception.*;
 import gerard.meli.backend_portfolio.mapper.*;
 import gerard.meli.backend_portfolio.repository.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class ExperienceService {
 
     private final ExperienceRepository repository;
@@ -18,15 +20,6 @@ public class ExperienceService {
     private final ExperienceMapper mapper;
     private final ExperienceTaskMapper childMapper;
     private final MarketGuard guard;
-
-    public ExperienceService(ExperienceRepository repository, ExperienceTaskRepository childRepository,
-            ExperienceMapper mapper, ExperienceTaskMapper childMapper, MarketGuard guard) {
-        this.repository = repository;
-        this.childRepository = childRepository;
-        this.mapper = mapper;
-        this.childMapper = childMapper;
-        this.guard = guard;
-    }
 
     // ---------- Experience ----------
 

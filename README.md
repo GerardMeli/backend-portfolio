@@ -46,7 +46,7 @@ createdb portfolio
 mvn spring-boot:run
 ```
 
-Au démarrage, `schema.sql` crée les tables si elles n'existent pas et insère les 3 marchés avec leurs sections (opération répétable sans risque). Hibernate vérifie ensuite que les entités correspondent au schéma (`ddl-auto: validate`).
+Au démarrage, `schema.sql` crée les tables si elles n'existent pas, applique les migrations compatibles et insère les 3 marchés avec leurs sections. Il ne vide pas les tables. Hibernate vérifie ensuite que les entités correspondent au schéma (`ddl-auto: validate`).
 
 3. Ouvrir Swagger : http://localhost:8080/swagger-ui.html
 
@@ -99,6 +99,7 @@ Ressources : `application.yml` et `schema.sql` dans `src/main/resources/`.
 |---|---|---|
 | GET | `/api/public/markets` | marchés du sélecteur |
 | GET | `/api/public/portfolio?market=CANADA&lang=en` | CV adapté (paramètres facultatifs) |
+| GET | `/api/public/photo` | photo de profil téléversée |
 | POST | `/api/auth/login` | connexion, renvoie un JWT et un cookie HttpOnly de refresh |
 | POST | `/api/auth/refresh` | renouvelle le JWT et fait tourner le refresh token |
 | POST | `/api/auth/logout` | révoque et efface le refresh token |
@@ -109,7 +110,7 @@ Pour chaque ressource : `GET`, `GET /{id}`, `POST`, `PUT /{id}`, `DELETE /{id}` 
 
 | Ressource | Chemin | Sous-ressource |
 |---|---|---|
-| Profil | `/api/admin/profile` (`GET`, `PUT`) | |
+| Profil | `/api/admin/profile` (`GET`, `PUT`) | `/photo` (`GET`, `POST` multipart champ `file`, `DELETE`) |
 | Expériences | `/api/admin/experiences` | `/{id}/tasks` |
 | Projets | `/api/admin/projects` | `/{id}/highlights` |
 | Compétences | `/api/admin/skill-categories` | `/{id}/skills` |

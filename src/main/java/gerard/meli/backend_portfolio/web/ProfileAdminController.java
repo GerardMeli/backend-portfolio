@@ -10,20 +10,17 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/admin/profile")
 @Tag(name = "Administration - Profil", description = "Gestion du profil administrateur")
 @SecurityRequirement(name = "bearerAuth")
+@RequiredArgsConstructor
 public class ProfileAdminController {
 
     private final ProfileService service;
-
-    public ProfileAdminController(ProfileService service) {
-        this.service = service;
-    }
 
     @Operation(
             summary = "Récupérer le profil",
