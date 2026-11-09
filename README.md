@@ -10,7 +10,7 @@ Tout le contenu (profil, expériences et tâches, formations, projets, compéten
 - PostgreSQL, sans Flyway : le schéma est dans `schema.sql`
 - Authentification JWT (un seul administrateur)
 - Swagger UI (springdoc) pour tester l'API
-- Maven, sans Docker
+- Maven et Docker
 
 ## Fonctionnement
 
@@ -53,6 +53,31 @@ Au démarrage, `schema.sql` crée les tables si elles n'existent pas, applique l
 Au premier démarrage, l'administrateur est créé uniquement lorsque `ADMIN_EMAIL` et `ADMIN_PASSWORD` sont fournis.
 
 Un guide de test pas à pas est fourni dans `swagger-test-guide.md`.
+
+## Lancer avec Docker
+
+Construire l'image depuis la racine du projet :
+
+```bash
+docker build -t backend-portfolio .
+```
+
+Lancer le conteneur en renseignant les variables de connexion à PostgreSQL et les secrets requis :
+
+```bash
+docker run --rm -p 8089:8089 \
+  -e SPRING_PROFILES_ACTIVE=prod \
+  -e DB_URL='jdbc:postgresql://HOST:5432/portfolio?sslmode=require' \
+  -e DB_USERNAME='postgres' \
+  -e DB_PASSWORD \
+  -e JWT_SECRET \
+  -e ADMIN_EMAIL \
+  -e ADMIN_PASSWORD \
+  -e CORS_ALLOWED_ORIGINS='http://localhost:4200' \
+  backend-portfolio
+```
+
+`DB_PASSWORD` et `JWT_SECRET` doivent être définis dans l'environnement de l'hôte. Le conteneur écoute sur le port `8089` par défaut ; `PORT` peut le remplacer.
 
 ## Configuration
 
